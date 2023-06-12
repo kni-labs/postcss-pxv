@@ -10,10 +10,10 @@
  
   
   div {
-    width: 150vp;
-    padding: 12vp 100vp 13vp 15vp;
+    width: 150pxv;
+    padding: 12pxv 100pxv 13pxv 15pxv;
     border: 2px solid blue;
-    margin-top: -20vp;
+    margin-top: -20pxv;
   }
   
   @media (min-width: 1024px) {
