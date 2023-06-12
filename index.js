@@ -17,10 +17,11 @@ module.exports = postcss.plugin('postcss-pxv', () => {
           const min = '1px';
 
           if (pxvValue >= 0) {
-            node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}vw * ${max} / ${basis}))`;
+            node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}px * ${max} / ${basis}))`;
           } else {
             const absPxvValue = Math.abs(pxvValue);
             node.value = `clamp(calc(${absPxvValue} * (100 / ${basis}) * -1vw), calc(${absPxvValue} * (100 / ${basis}) * -1vw), -1px) `;
+            // still needs "large" value tweak
           }
         }
       });
