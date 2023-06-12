@@ -1,6 +1,6 @@
 const fs = require('fs');
 const postcss = require('postcss');
-const myPlugin = require('./my-postcss-plugin');
+const myPlugin = require('./index');
 
 const css = fs.readFileSync('input.css', 'utf8');
 
