@@ -1,8 +1,9 @@
-# postcss-vp
+# postcss-pxv
 
 Very much a work in progress
 
 for now: 
 
-1. edit `index.js` or `input.css`
-2. process css: `node process-css.js`
+1. `npm i`
+2. edit `index.js` or `input.css`
+3. process css: `node process-css.js`
