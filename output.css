@@ -3,7 +3,7 @@
     --siteBasisDesktop: 1440;
     --siteBasis: var(--siteBasisMobile);
     --siteMaxMobile: 600;
-    --siteMaxDesktop: 2000;
+    --siteMaxDesktop: 1600;
     --siteMax: var(--siteMaxMobile);
   }
   
