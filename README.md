@@ -26,7 +26,7 @@ Use this when you want to reach for a `px` but need it to behave like a `vw` uni
 | `padding` (including neg values) | `box-shadow` |
 | `margin`  |  |
 
-* **Note:**`font-size` *does* support clamp but responsive typography needs a different solution to allow for the browser to still be able to use the zoom functionality. (For now we are using  [kni-scss](https://github.com/kni-labs/kni-scss) for this.)
+* **Note:**`font-size` *does* support clamp but responsive typography needs a different solution to allow for the browser to still be able to use the zoom functionality. (For now we are using  [kni-scss](https://github.com/kni-labs/kni-scss) for this, but I think [this method will be ready shortly](https://codepen.io/dbox/pen/poQyeEr).
 
 ### Harnessing the power of css custom props
 
