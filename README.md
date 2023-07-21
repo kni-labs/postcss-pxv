@@ -1,6 +1,5 @@
 # postcss-pxv
 
-Note this very much a work in progress and hasn't been fully tested yet.
 
 This plugin creates a new pixel-viewport unit of measurement called a `pxv`. 
 
