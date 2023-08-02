@@ -7,8 +7,6 @@
     --siteMax: var(--siteMaxMobile);
   }
   
- 
-  
   div {
     width: clamp(1px, calc(150vw * (100 / var(--siteBasis))), calc(150px * var(--siteMax) / var(--siteBasis)));
     padding: clamp(1px, calc(12vw * (100 / var(--siteBasis))), calc(12px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(13vw * (100 / var(--siteBasis))), calc(13px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(15vw * (100 / var(--siteBasis))), calc(15px * var(--siteMax) / var(--siteBasis)));
@@ -25,4 +23,8 @@
     div {
       border: 5px solid green;
     }
+  }
+
+  div.bobo {
+    width: clamp(1px, calc(50.5vw * (100 / var(--siteBasis))), calc(50.5px * var(--siteMax) / var(--siteBasis)));
   }

@@ -9,8 +9,8 @@ module.exports = (opts = {}) => {
         const parsedValue = valueParser(decl.value);
 
         parsedValue.walk((node) => {
-          if (node.type === 'word' && /^[0-9-]+pxv$/i.test(node.value)) {
-            const pxvValue = parseInt(node.value.replace('pxv', ''));
+          if (node.type === 'word' && /^[0-9.-]+pxv$/i.test(node.value)) {
+            const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
             const basis = 'var(--siteBasis)';
             const max = 'var(--siteMax)';
