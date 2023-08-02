@@ -25,6 +25,7 @@ Use this when you want to reach for a `px` but need it to behave like a `vw` uni
 | `padding` (including neg values) | `box-shadow` |
 | `margin`  |  |
 | `left`, `right`, `top`, `bottom`  |  |
+| `letter-spacing` | |
 
 * **Note:**`font-size` *does* support clamp but responsive typography needs a different solution to allow for the browser to still be able to use the zoom functionality. (Please see the 2.0 branch alpha release of  [kni-scss](https://github.com/kni-labs/kni-scss/tree/2.0) for this.)
 
