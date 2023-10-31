@@ -21,7 +21,7 @@ Use this when you want to reach for a `px` but need it to behave like a `vw` uni
 | ✅ Use with | ❌ Don't use with|
 | ----------| --------------|
 | `width`   | `font-size`*  |
-| `height`  | `box-shadow` |
+| `height`  | 
 | `padding` (including neg values) | 
 | `margin`  |  |
 | `left`, `right`, `top`, `bottom`  |  |
