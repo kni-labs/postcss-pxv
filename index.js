@@ -16,7 +16,9 @@ module.exports = () => {
             if (node.type === 'word' && /^[0-9.-]+pxv$/i.test(node.value)) {
               const pxvValue = parseFloat(node.value.replace('pxv', ''));
   
-              if (pxvValue >= 0) {
+              if (pxvValue === 0) {
+                node.value = 0;
+              } else if (pxvValue > 0) {
                 node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}px * ${max} / ${basis}))`;
               } else {
                 const absPxvValue = Math.abs(pxvValue);

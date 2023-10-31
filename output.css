@@ -43,3 +43,7 @@
   div.weird-stuff {
     margin: clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) calc(clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) + calc(clamp(1px, calc(10vw * (100 / var(--siteBasis))), calc(10px * var(--siteMax) / var(--siteBasis))) + 5%)) clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
   }
+
+  div.zero-test {
+    margin: clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) 0 clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
+  }

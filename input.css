@@ -43,3 +43,7 @@
   div.weird-stuff {
     margin: 20pxv calc(20pxv + calc(10pxv + 5%)) 50pxv;
   }
+
+  div.zero-test {
+    margin: 20pxv 0pxv 50pxv;
+  }
