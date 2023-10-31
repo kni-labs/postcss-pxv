@@ -39,3 +39,7 @@
   div.bordertest {
     border: 15pxv solid pink;
   }
+
+  div.weird-stuff {
+    margin: 20pxv calc(20pxv + calc(10pxv + 5%)) 50pxv;
+  }
