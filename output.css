@@ -7,6 +7,8 @@
     --siteMax: var(--siteMaxMobile);
   }
   
+
+
   div {
     width: clamp(1px, calc(150vw * (100 / var(--siteBasis))), calc(150px * var(--siteMax) / var(--siteBasis)));
     padding: clamp(1px, calc(12vw * (100 / var(--siteBasis))), calc(12px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(13vw * (100 / var(--siteBasis))), calc(13px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(15vw * (100 / var(--siteBasis))), calc(15px * var(--siteMax) / var(--siteBasis)));
@@ -14,6 +16,8 @@
     margin-top: clamp(calc(20 * (100 / var(--siteBasis)) * -1vw), calc(20 * (100 / var(--siteBasis)) * -1vw), -1px);
   }
   
+   
+ 
   @media (min-width: 1024px) {
     * {
       --siteBasis: var(--siteBasisDesktop);
@@ -27,4 +31,10 @@
 
   div.bobo {
     width: clamp(1px, calc(50.5vw * (100 / var(--siteBasis))), calc(50.5px * var(--siteMax) / var(--siteBasis)));
+  }
+
+  div.shorthand {
+    background: #eee;
+    padding: clamp(1px, calc(5vw * (100 / var(--siteBasis))), calc(5px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(300vw * (100 / var(--siteBasis))), calc(300px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis)));
+    margin: clamp(1px, calc(30vw * (100 / var(--siteBasis))), calc(30px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(45vw * (100 / var(--siteBasis))), calc(45px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(3vw * (100 / var(--siteBasis))), calc(3px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(800vw * (100 / var(--siteBasis))), calc(800px * var(--siteMax) / var(--siteBasis)));
   }

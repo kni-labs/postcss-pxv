@@ -8,13 +8,13 @@ module.exports = (opts = {}) => {
       root.walkDecls((decl) => {
         const parsedValue = valueParser(decl.value);
 
+        const basis = 'var(--siteBasis)';
+        const max = 'var(--siteMax)';
+        const min = '1px';
+
         parsedValue.walk((node) => {
           if (node.type === 'word' && /^[0-9.-]+pxv$/i.test(node.value)) {
             const pxvValue = parseFloat(node.value.replace('pxv', ''));
-
-            const basis = 'var(--siteBasis)';
-            const max = 'var(--siteMax)';
-            const min = '1px';
 
             if (pxvValue >= 0) {
               node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}px * ${max} / ${basis}))`;

@@ -7,8 +7,8 @@
     --siteMax: var(--siteMaxMobile);
   }
   
- 
-  
+
+
   div {
     width: 150pxv;
     padding: 12pxv 100pxv 13pxv 15pxv;
@@ -16,6 +16,8 @@
     margin-top: -20pxv;
   }
   
+   
+ 
   @media (min-width: 1024px) {
     * {
       --siteBasis: var(--siteBasisDesktop);
@@ -29,4 +31,10 @@
 
   div.bobo {
     width: 50.5pxv;
+  }
+
+  div.shorthand {
+    background: #eee;
+    padding: 5pxv 300pxv 20pxv;
+    margin: 30pxv 45pxv 3pxv 800pxv;
   }
