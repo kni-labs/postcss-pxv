@@ -7,6 +7,8 @@
     --siteMax: var(--siteMaxMobile);
   }
   
+ 
+  
   div {
     width: clamp(1px, calc(150vw * (100 / var(--siteBasis))), calc(150px * var(--siteMax) / var(--siteBasis)));
     padding: clamp(1px, calc(12vw * (100 / var(--siteBasis))), calc(12px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(13vw * (100 / var(--siteBasis))), calc(13px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(15vw * (100 / var(--siteBasis))), calc(15px * var(--siteMax) / var(--siteBasis)));
@@ -27,4 +29,10 @@
 
   div.bobo {
     width: clamp(1px, calc(50.5vw * (100 / var(--siteBasis))), calc(50.5px * var(--siteMax) / var(--siteBasis)));
+  }
+  div.shorthand {
+    background: tomato;
+    color: #fff;
+    padding: clamp(1px, calc(40vw * (100 / var(--siteBasis))), calc(40px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
+    margin: clamp(1px, calc(400vw * (100 / var(--siteBasis))), calc(400px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(99vw * (100 / var(--siteBasis))), calc(99px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis)));
   }

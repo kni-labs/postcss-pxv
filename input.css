@@ -30,3 +30,9 @@
   div.bobo {
     width: 50.5pxv;
   }
+  div.shorthand {
+    background: tomato;
+    color: #fff;
+    padding: 40pxv 20pxv 100pxv 50pxv;
+    margin: 400pxv 200pxv 99pxv 200pxv;
+  }
