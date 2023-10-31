@@ -36,3 +36,6 @@
     padding: 40pxv 20pxv 100pxv 50pxv;
     margin: 400pxv 200pxv 99pxv 200pxv;
   }
+  div.bordertest {
+    border: 15pxv solid pink;
+  }

@@ -36,3 +36,6 @@
     padding: clamp(1px, calc(40vw * (100 / var(--siteBasis))), calc(40px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
     margin: clamp(1px, calc(400vw * (100 / var(--siteBasis))), calc(400px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(99vw * (100 / var(--siteBasis))), calc(99px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis)));
   }
+  div.bordertest {
+    border: clamp(1px, calc(15vw * (100 / var(--siteBasis))), calc(15px * var(--siteMax) / var(--siteBasis))) solid pink;
+  }
