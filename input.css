@@ -13,7 +13,7 @@
     width: 150pxv;
     padding: 12pxv 100pxv 13pxv 15pxv;
     border: 2px solid blue;
-    margin-top: -20pxv;
+    margin-left: -100pxv;
   }
   
   @media (min-width: 1024px) {
