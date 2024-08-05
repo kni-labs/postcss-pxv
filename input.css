@@ -9,32 +9,13 @@
   
  
   
-  div.border {
+  div {
     width: 150pxv;
     padding: 12pxv 100pxv 13pxv 15pxv;
-    border: 5pxv solid blue;
+    border: 2px solid blue;
+    margin-top: -20pxv;
   }
-  div.absolute {
-    position: absolute;
-    top: 50pxv;
-    right: -99pxv;
-    width: 490pxv;
-    height: 44.5px;
-    border: 1pxv solid green;
-    background: palegoldenrod;
-  }
-  div.negativeval {
-    border: 4pxv solid brown;
-    background: paleturquoise;
-    width: 300pxv;
-    height: 200pxv;
-    margin-left: -30pxv;
-  }
-  div.decimal {
-    width: 845.34534pxv;
-    height: 35.3344pxv;
-    background: lightpink;
-  }
+  
   @media (min-width: 1024px) {
     * {
       --siteBasis: var(--siteBasisDesktop);

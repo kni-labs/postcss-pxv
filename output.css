@@ -9,32 +9,13 @@
   
  
   
-  div.border {
+  div {
     width: clamp(1px, calc(150vw * (100 / var(--siteBasis))), calc(150px * var(--siteMax) / var(--siteBasis)));
     padding: clamp(1px, calc(12vw * (100 / var(--siteBasis))), calc(12px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(13vw * (100 / var(--siteBasis))), calc(13px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(15vw * (100 / var(--siteBasis))), calc(15px * var(--siteMax) / var(--siteBasis)));
-    border: clamp(1px, calc(5vw * (100 / var(--siteBasis))), calc(5px * var(--siteMax) / var(--siteBasis))) solid blue;
+    border: 2px solid blue;
+    margin-top: clamp(calc(-20 * (100 / var(--siteBasis)) * 1vw), calc(-20px * var(--siteMax) / var(--siteBasis)), -1px);
   }
-  div.absolute {
-    position: absolute;
-    top: clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
-    right: clamp(calc(-99 * (100 / var(--siteBasis)) * 1vw), calc(-99px * var(--siteMax) / var(--siteBasis)), -1px);
-    width: clamp(1px, calc(490vw * (100 / var(--siteBasis))), calc(490px * var(--siteMax) / var(--siteBasis)));
-    height: 44.5px;
-    border: clamp(1px, calc(1vw * (100 / var(--siteBasis))), calc(1px * var(--siteMax) / var(--siteBasis))) solid green;
-    background: palegoldenrod;
-  }
-  div.negativeval {
-    border: clamp(1px, calc(4vw * (100 / var(--siteBasis))), calc(4px * var(--siteMax) / var(--siteBasis))) solid brown;
-    background: paleturquoise;
-    width: clamp(1px, calc(300vw * (100 / var(--siteBasis))), calc(300px * var(--siteMax) / var(--siteBasis)));
-    height: clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis)));
-    margin-left: clamp(calc(-30 * (100 / var(--siteBasis)) * 1vw), calc(-30px * var(--siteMax) / var(--siteBasis)), -1px);
-  }
-  div.decimal {
-    width: clamp(1px, calc(845.34534vw * (100 / var(--siteBasis))), calc(845.34534px * var(--siteMax) / var(--siteBasis)));
-    height: clamp(1px, calc(35.3344vw * (100 / var(--siteBasis))), calc(35.3344px * var(--siteMax) / var(--siteBasis)));
-    background: lightpink;
-  }
+  
   @media (min-width: 1024px) {
     * {
       --siteBasis: var(--siteBasisDesktop);
