@@ -22,7 +22,7 @@ Use this when you want to reach for a `px` but need it to behave like a `vw` uni
 | ----------| --------------|
 | `width`   | `font-size`*  |
 | `height`  | 
-| `padding` (including neg values) | 
+| `padding` |  |
 | `margin`  |  |
 | `left`, `right`, `top`, `bottom`  |  |
 | `box-shadow` | |
