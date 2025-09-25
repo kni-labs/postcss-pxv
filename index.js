@@ -1,9 +1,32 @@
-onst valueParser = require('postcss-value-parser');
+const valueParser = require('postcss-value-parser');
+const postcss = require('postcss');
 
 module.exports = () => {
   return {
     postcssPlugin: 'postcss-pxv',
     Once(root) {
+      //
+      // 1. Inject defaults if no :root found
+      //
+      const hasRoot = root.nodes.some(
+        (node) => node.type === 'rule' && node.selector === ':root'
+      );
+
+      if (!hasRoot) {
+        const rootRule = postcss.rule({ selector: ':root' });
+        rootRule.append({ prop: '--siteBasis', value: '375' });
+        rootRule.append({ prop: '--siteMax', value: '600' });
+        rootRule.append({
+          prop: '--pxvUnit',
+          value:
+            'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))',
+        });
+        root.prepend(rootRule);
+      }
+
+      //
+      // 2. Convert pxv values
+      //
       root.walkDecls((decl) => {
         const convertValue = (value) => {
           const parsedValue = valueParser(value);
@@ -13,9 +36,8 @@ module.exports = () => {
               const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
               if (pxvValue === 0) {
-                node.value = '0'; // Clean zero
+                node.value = '0'; // clean zero
               } else {
-                // Multiply value (positive or negative) by a shared CSS var
                 node.value = `calc(${pxvValue} * var(--pxvUnit))`;
               }
             }
