@@ -5,10 +5,6 @@ module.exports = () => {
     postcssPlugin: 'postcss-pxv',
     Once(root) {
       root.walkDecls((decl) => {
-        const basis = 'var(--siteBasis)';
-        const max = 'var(--siteMax)';
-        const min = '1px';
-
         const convertValue = (value) => {
           const parsedValue = valueParser(value);
 
@@ -18,11 +14,9 @@ module.exports = () => {
 
               if (pxvValue === 0) {
                 node.value = '0';
-              } else if (pxvValue > 0) {
-                node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}px * ${max} / ${basis}))`;
               } else {
-                const absPxvValue = Math.abs(pxvValue);
-                node.value = `clamp(calc(-${absPxvValue} * (100 / ${basis}) * 1vw), calc(-${absPxvValue}px * ${max} / ${basis}), -${min})`;
+                // Just multiply against the unit variable
+                node.value = `calc(${pxvValue} * var(--pxvUnit))`;
               }
             }
           });
