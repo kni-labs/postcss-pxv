@@ -1,4 +1,4 @@
-const valueParser = require('postcss-value-parser');
+onst valueParser = require('postcss-value-parser');
 
 module.exports = () => {
   return {
@@ -13,9 +13,9 @@ module.exports = () => {
               const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
               if (pxvValue === 0) {
-                node.value = '0';
+                node.value = '0'; // Clean zero
               } else {
-                // Just multiply against the unit variable
+                // Multiply value (positive or negative) by a shared CSS var
                 node.value = `calc(${pxvValue} * var(--pxvUnit))`;
               }
             }
