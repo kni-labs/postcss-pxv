@@ -27,7 +27,7 @@ module.exports = () => {
       ensureVar('--siteBasis', '375');
       ensureVar('--siteMax', '600');
       ensureVar(
-        '--pxvUnitPos',
+        '--pxvUnit',
         'clamp(1px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
       );
 
@@ -42,12 +42,10 @@ module.exports = () => {
             if (pxvValue === 0) {
               node.value = '0';
             } else if (pxvValue > 0) {
-              // Positive: use clamped min of 1px
-              node.value = `calc(${pxvValue} * var(--pxvUnitPos))`;
+              node.value = `calc(${pxvValue} * var(--pxvUnit))`;
             } else {
-              // Negative: still scale, but keep sign
               const absVal = Math.abs(pxvValue);
-              node.value = `calc(-${absVal} * var(--pxvUnitPos))`;
+              node.value = `calc(-${absVal} * var(--pxvUnit))`;
             }
           }
         });
