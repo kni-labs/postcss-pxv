@@ -5,9 +5,7 @@ module.exports = () => {
   return {
     postcssPlugin: 'postcss-pxv',
     Once(root) {
-      //
-      // 1. Inject defaults if no :root found
-      //
+      // Inject defaults if no :root present
       const hasRoot = root.nodes.some(
         (node) => node.type === 'rule' && node.selector === ':root'
       );
@@ -24,9 +22,7 @@ module.exports = () => {
         root.prepend(rootRule);
       }
 
-      //
-      // 2. Properties where we always expand inline (instead of using var)
-      //
+      // Shorthands that need full expansion
       const shorthandProps = new Set([
         'border',
         'border-top',
@@ -34,17 +30,8 @@ module.exports = () => {
         'border-bottom',
         'border-left',
         'outline',
-        'font',
-        'text-decoration',
-        'background',
-        'flex',
-        'grid',
-        'columns',
       ]);
 
-      //
-      // 3. Walk declarations and replace pxv
-      //
       root.walkDecls((decl) => {
         const basis = 'var(--siteBasis)';
         const max = 'var(--siteMax)';
@@ -60,7 +47,7 @@ module.exports = () => {
               if (pxvValue === 0) {
                 node.value = '0';
               } else if (shorthandProps.has(decl.prop)) {
-                // Expand inline for shorthands
+                // Inline full clamp for border/outline
                 if (pxvValue > 0) {
                   node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}px * ${max} / ${basis}))`;
                 } else {
@@ -68,7 +55,7 @@ module.exports = () => {
                   node.value = `clamp(calc(-${absPxvValue} * (100 / ${basis}) * 1vw), calc(-${absPxvValue}px * ${max} / ${basis}), -${min})`;
                 }
               } else {
-                // Safe properties → keep var-based short form
+                // Default compact form
                 node.value = `calc(${pxvValue} * var(--pxvUnit))`;
               }
             }
