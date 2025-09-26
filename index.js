@@ -1,6 +1,3 @@
-const valueParser = require('postcss-value-parser');
-const postcss = require('postcss');
-
 module.exports = () => {
   return {
     postcssPlugin: 'postcss-pxv',
@@ -24,14 +21,15 @@ module.exports = () => {
         }
       };
 
-      // Defaults (mobile-first like before)
+      // Defaults
+      ensureVar('--siteMin', '0');      // ✅ can override
       ensureVar('--siteBasis', '375');
       ensureVar('--siteMax', '600');
 
-      // The unit definition — centralizes the clamp formula (floor = 0px)
+      // Fluid unit
       ensureVar(
         '--pxvUnit',
-        'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
+        'calc((100 / var(--siteBasis)) * 1vw)'
       );
 
       // Walk declarations for pxv replacement
@@ -43,12 +41,23 @@ module.exports = () => {
             const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
             if (pxvValue === 0) {
-              node.value = '0'; // clean zero
-            } else if (pxvValue > 0) {
-              node.value = `calc(${pxvValue} * var(--pxvUnit))`;
+              node.value = '0';
             } else {
               const absVal = Math.abs(pxvValue);
-              node.value = `calc(-${absVal} * var(--pxvUnit))`;
+
+              // Core clamp with min/basis/max
+              let clampExpr = `clamp(
+                calc(${absVal}px * var(--siteMin) / var(--siteBasis)),
+                calc(${absVal} * var(--pxvUnit)),
+                calc(${absVal}px * var(--siteMax) / var(--siteBasis))
+              )`;
+
+              // Preserve sign for negatives
+              if (pxvValue < 0) {
+                clampExpr = `calc(-1 * ${clampExpr})`;
+              }
+
+              node.value = clampExpr.replace(/\s+/g, ' '); // minify spaces
             }
           }
         });
