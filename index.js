@@ -1,60 +1,55 @@
 const valueParser = require('postcss-value-parser');
 const postcss = require('postcss');
 
-module.exports = (opts = {}) => {
-  // allow overrides from options, fallback to defaults
-  const basis = opts.min || 375;
-  const max = opts.max || 600;
-
+module.exports = () => {
   return {
     postcssPlugin: 'postcss-pxv',
     Once(root) {
       //
-      // 1. Ensure :root exists (create if missing)
+      // 1. Inject defaults if no :root found
       //
-      let rootRule = root.nodes.find(
+      const hasRoot = root.nodes.some(
         (node) => node.type === 'rule' && node.selector === ':root'
       );
 
-      if (!rootRule) {
-        rootRule = postcss.rule({
-          selector: ':root',
-          source: root.source
+      if (!hasRoot) {
+        const rootRule = postcss.rule({ selector: ':root' });
+        rootRule.append({ prop: '--siteBasis', value: '375' });
+        rootRule.append({ prop: '--siteMax', value: '600' });
+        rootRule.append({
+          prop: '--pxvUnit',
+          value:
+            'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))',
         });
         root.prepend(rootRule);
       }
 
       //
-      // 2. Only add missing variables (don’t overwrite existing)
+      // 2. Properties where we always expand inline (instead of using var)
       //
-      function ensureVar(rule, prop, value) {
-        const exists = rule.nodes.some(
-          (decl) => decl.type === 'decl' && decl.prop === prop
-        );
-
-        if (!exists) {
-          rule.append(
-            postcss.decl({
-              prop,
-              value,
-              source: root.source
-            })
-          );
-        }
-      }
-
-      ensureVar(rootRule, '--siteBasis', String(basis));
-      ensureVar(rootRule, '--siteMax', String(max));
-      ensureVar(
-        rootRule,
-        '--pxvUnit',
-        `clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))`
-      );
+      const shorthandProps = new Set([
+        'border',
+        'border-top',
+        'border-right',
+        'border-bottom',
+        'border-left',
+        'outline',
+        'font',
+        'text-decoration',
+        'background',
+        'flex',
+        'grid',
+        'columns',
+      ]);
 
       //
-      // 3. Convert pxv values → calc(... * var(--pxvUnit))
+      // 3. Walk declarations and replace pxv
       //
       root.walkDecls((decl) => {
+        const basis = 'var(--siteBasis)';
+        const max = 'var(--siteMax)';
+        const min = '0px';
+
         const convertValue = (value) => {
           const parsedValue = valueParser(value);
 
@@ -63,8 +58,17 @@ module.exports = (opts = {}) => {
               const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
               if (pxvValue === 0) {
-                node.value = '0'; // clean zero
+                node.value = '0';
+              } else if (shorthandProps.has(decl.prop)) {
+                // Expand inline for shorthands
+                if (pxvValue > 0) {
+                  node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}px * ${max} / ${basis}))`;
+                } else {
+                  const absPxvValue = Math.abs(pxvValue);
+                  node.value = `clamp(calc(-${absPxvValue} * (100 / ${basis}) * 1vw), calc(-${absPxvValue}px * ${max} / ${basis}), -${min})`;
+                }
               } else {
+                // Safe properties → keep var-based short form
                 node.value = `calc(${pxvValue} * var(--pxvUnit))`;
               }
             }
