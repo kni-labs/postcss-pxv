@@ -13,12 +13,15 @@ module.exports = () => {
       );
 
       if (!rootRule) {
-        rootRule = postcss.rule({ selector: ':root' });
+        rootRule = postcss.rule({
+          selector: ':root',
+          source: root.source // inherit source info to avoid warnings
+        });
         root.prepend(rootRule);
       }
 
       //
-      // 2. Only add missing variables (don’t overwrite)
+      // 2. Only add missing variables (don’t overwrite existing)
       //
       function ensureVar(rule, prop, value) {
         const exists = rule.nodes.some(
@@ -26,7 +29,13 @@ module.exports = () => {
         );
 
         if (!exists) {
-          rule.append({ prop, value });
+          rule.append(
+            postcss.decl({
+              prop,
+              value,
+              source: root.source // also attach source to decls
+            })
+          );
         }
       }
 
