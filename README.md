@@ -1,4 +1,4 @@
-<file name=0 path=/Users/danielbox/Downloads/README_v2.md># postcss-pxv
+# postcss-pxv
 
 A PostCSS plugin that introduces a new CSS unit: **`pxv`** — a pixel that scales with the viewport.  
 
@@ -46,9 +46,9 @@ There are times when `px` feels natural but a value really needs to scale with t
 
 ## 📉 Smaller CSS, fewer bytes
 
-In version 1, each use of `pxv` generated a full `clamp()` expression inline, which could significantly bloat CSS files in larger projects. Version 2 optimizes this by referencing a shared `--pxvUnit` variable, drastically reducing repetition and file size. This change can lead to up to a ~75% reduction in CSS size for projects with many `pxv` values.
+Previously, every use of `pxv` generated a full `clamp()` expression inline, leading to significant repetition and larger CSS files. The improved approach now references a shared `--pxvUnit` variable, drastically reducing repetition and file size—often by up to ~75% for projects with many `pxv` values.
 
-### Before (v1 output):
+### Before:
 
 ```css
 h1 {
@@ -58,7 +58,7 @@ h1 {
 }
 ```
 
-### After (v2 output):
+### After:
 
 ```css
 :root {
@@ -142,11 +142,10 @@ This pattern keeps design tokens like `--mobile` and `--desktop` in one place, w
 
 ---
 
-## 🚨 Changes in v2.0
+## 🚀 What’s new in v2.0
 
-- `pxv` now references a shared `--pxvUnit` variable instead of inlining `clamp()` for every value.  
-- The plugin injects `--siteBasis`, `--siteMax`, and `--pxvUnit` automatically.  
-- Existing values in `:root` are left untouched if already defined.  
+Version 2 outputs cleaner, smaller CSS by centralizing the `clamp()` logic into a shared `--pxvUnit` variable.  
+The plugin automatically injects the needed variables (`--siteBasis`, `--siteMax`, `--pxvUnit`) if they’re not already defined, so it should just work out of the box.  
 
 ---
 
@@ -211,4 +210,3 @@ pnpm add -D postcss-pxv
 2. Edit `index.js`  
 3. Test locally with `node process-css.js` or link into a project  
 4. Open a PR 🚀  
-</file>
