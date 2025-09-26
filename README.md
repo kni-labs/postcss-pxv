@@ -20,7 +20,7 @@ Sometimes layouts need the precision of pixels but the flexibility of percentage
 }
 ```
 
-**Which actually resolves in the browser to (with default variables):**
+**Which looks like this when computed (note actual code is much trimmer):**
 ```css
 :root {
   --siteBasis: 375;
