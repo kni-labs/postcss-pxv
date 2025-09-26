@@ -1,28 +1,82 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="output.css">
-</head>
-<body>
-  <h3>Border test</h3>
-  <div class="border">borders are cool</div>
-  <hr>
-  <h3>Absolule positioning</h3>
-  <div class="absolute">i'm absolute</div>
-  <h3>Negative value above largest breakpoint</h3>
-  <div class="negativeval">For Trevor</div>
-    <hr>
-  <h3>Decimal Test</h3>
-  <div class="decimal">decimal stuff</div>
-  <hr>
-  <h3>Shorthand test</h3>
-  <div class="shorthand">shorthand! who knew</div>
-  <hr>
-  <h3>weird stuff</h3>
-  <div class="weird-stuff">a non-pxv value with spaces</div>
-  <hr>
-  <h3>Zero value</h3>
-  <div class="zero-test">a 0pxv value</div>
+<html lang="en">
+  <head>
+    <meta chaet="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <h3>Border test</h3>
+    <p>
+      there is a purposeful dead "no scale zone currently between 601px and
+      1024px
+    </p>
+    <div class="border">borders are cool</div>
+    <hr />
+    <h3>Absolule positioning</h3>
+    <div class="absolute">i'm absolute</div>
+    <h3>Negative value above largest breakpoint</h3>
+    <div class="negativeval">For Trevor</div>
+    <hr />
+    <h3>Decimal Test</h3>
+    <div class="decimal">decimal stuff</div>
+    <hr />
+    <h3>Shorthand test</h3>
+    <div class="shorthand">shorthand! asdfasdfwho knew</div>
+    <hr />
+    <h3>weird stuff</h3>
+    <div class="weird-stuff">a non-pxv value with spaces</div>
+    <hr />
+    <h3>Zero value</h3>
+    <div class="zero-test">a 0pxv value</div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Create the sticky info div
+        const info = document.createElement("div");
+        info.style.position = "fixed";
+        info.style.top = "0";
+        info.style.right = "0";
+        info.style.background = "rgba(0,0,0,0.85)";
+        info.style.color = "white";
+        info.style.fontFamily = "system-ui, sans-serif";
+        info.style.fontSize = "14px";
+        info.style.lineHeight = "1.4";
+        info.style.padding = "8px 12px";
+        info.style.zIndex = "9999";
+        info.style.borderBottomLeftRadius = "6px";
+        info.style.pointerEvents = "none"; // don't block clicks
+        document.body.appendChild(info);
 
-</body>
+        // Function to grab a CSS var safely
+        function cssVar(name) {
+          return getComputedStyle(document.documentElement)
+            .getPropertyValue(name)
+            .trim();
+        }
+
+        // Update values in panel
+        function updateInfo() {
+          const vw = window.innerWidth;
+          let siteMin = cssVar("--siteMinHeight") || cssVar("--siteMin");
+          siteMin = siteMin || "0"; // default to 0 if not defined
+
+          const siteBasis = cssVar("--siteBasis") || "—";
+          const siteMax = cssVar("--siteMax") || "—";
+
+          info.innerHTML = `
+            <div><strong>Width:</strong> ${vw}px</div>
+            <div><strong>siteMin:</strong> ${siteMin}</div>
+            <div><strong>siteBasis:</strong> ${siteBasis}</div>
+            <div><strong>siteMax:</strong> ${siteMax}</div>
+          `;
+        }
+
+        // Run initially + on resize
+        updateInfo();
+        window.addEventListener("resize", updateInfo);
+      });
+    </script>
+    <script type="module" src="/main.js"></script>
+  </body>
 </html>
