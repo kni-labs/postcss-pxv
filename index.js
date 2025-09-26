@@ -24,8 +24,11 @@ module.exports = () => {
         }
       };
 
+      // Defaults (mobile-first like before)
       ensureVar('--siteBasis', '375');
       ensureVar('--siteMax', '600');
+
+      // The unit definition — centralizes the clamp formula
       ensureVar(
         '--pxvUnit',
         'clamp(1px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
@@ -40,7 +43,7 @@ module.exports = () => {
             const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
             if (pxvValue === 0) {
-              node.value = '0';
+              node.value = '0'; // clean zero
             } else if (pxvValue > 0) {
               node.value = `calc(${pxvValue} * var(--pxvUnit))`;
             } else {
