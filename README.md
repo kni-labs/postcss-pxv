@@ -2,7 +2,7 @@
 
 A PostCSS plugin that introduces a new CSS unit: **`pxv`** — a pixel that scales with the viewport.  
 
-Instead of hand-writing `clamp()` everywhere, code can stay simple. Here’s how it works:
+Sometimes layouts need the precision of pixels but the flexibility of percentages. That’s where `pxv` comes in: it’s like a pixel that flexes with the viewport.
 
 **Input:**
 ```css
@@ -36,13 +36,10 @@ Instead of hand-writing `clamp()` everywhere, code can stay simple. Here’s how
 
 ---
 
-## ✨ Why `pxv`?
-
-There are times when `px` feels natural but a value really needs to scale with the viewport. `pxv` acts like a pixel that knows how to flex:  
-
-- Scales predictably between a chosen basis and a max breakpoint  
-- Removes repetitive `clamp()` boilerplate  
-- Keeps scaling logic in one place (`:root`), so adjustments are easier  
+Using `pxv` means:
+- Layout values stay proportional as screens get bigger or smaller
+- One shared formula in `:root` replaces hundreds of repeated `clamp()` calls
+- Adjusting scaling is as simple as tweaking two variables
 
 ## 📉 Smaller CSS, fewer bytes
 
