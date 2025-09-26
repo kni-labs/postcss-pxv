@@ -27,12 +27,11 @@ module.exports = () => {
       // Defaults (mobile-first like before)
       ensureVar('--siteBasis', '375');
       ensureVar('--siteMax', '600');
-      ensureVar('--siteMin', '0px');
 
-      // The unit definition — centralizes the clamp formula
+      // The unit definition — centralizes the clamp formula (min back to 0px)
       ensureVar(
         '--pxvUnit',
-        'clamp(var(--siteMin, 0px), calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
+        'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
       );
 
       // Walk declarations for pxv replacement
