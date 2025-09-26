@@ -1,68 +1,63 @@
 :root {
-    --siteBasisMobile: 375;
-    --siteBasisDesktop: 1440;
-    --siteBasis: var(--siteBasisMobile);
-    --siteMaxMobile: 600;
-    --siteMaxDesktop: 1600;
-    --siteMax: var(--siteMaxMobile);
-  }
-  
- 
-  
-  div.border {
-    width: 150pxv;
-    padding: 12pxv 100pxv 13pxv 15pxv;
-    border: 5pxv solid blue;
-  }
-  div.absolute {
-    position: absolute;
-    top: 50pxv;
-    right: -99pxv;
-    width: 490pxv;
-    height: 44.5px;
-    border: 100pxv solid green;
-    background: palegoldenrod;
-  }
-  div.negativeval {
-    border: 4pxv solid brown;
-    background: paleturquoise;
-    width: 300pxv;
-    height: 200pxv;
-    margin-left: -30pxv;
-  }
-  div.decimal {
-    width: 845.34534pxv;
-    height: 35.3344pxv;
-    background: lightpink;
-  }
-  @media (min-width: 1024px) {
-    :root {
-      --siteBasis: var(--siteBasisDesktop);
-      --siteMax: var(--siteMaxDesktop);
-    }
-  
-    div {
-      border: 5px solid green;
-    }
-  }
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
 
-  div.bobo {
-    width: 50.5pxv;
+@media (min-width: 601px) {
+  :root {
+    --siteMin: 1024;
+    --siteBasis: 1440;
+    --siteMax: 2500;
   }
-  div.shorthand {
-    background: tomato;
-    color: #fff;
-    padding: 40pxv 20pxv 100pxv 50pxv;
-    margin: 400pxv 200pxv 99pxv 200pxv;
-  }
-  div.bordertest {
-    border: 15pxv solid pink;
-  }
+}
+h1 {
+  font-size: 16pxv; /* should be transformed by your plugin */
+  line-height: 24pxv; /* another example */
+}
 
-  div.weird-stuff {
-    margin: 20pxv calc(20pxv + calc(10pxv + 5%)) 50pxv;
-  }
+div.border {
+  width: 150pxv;
+  padding: 12pxv 100pxv 13pxv 15pxv;
+  border: 5pxv solid blue;
+}
+div.absolute {
+  position: absolute;
+  top: 50pxv;
+  right: 50pxv;
+  width: 490pxv;
+  height: 44.5px;
+  border: 50pxv solid green;
+  background: palegoldenrod;
+}
+div.negativeval {
+  border: 4pxv solid brown;
+  background: paleturquoise;
+  width: 300pxv;
+  height: 200pxv;
+  margin-left: -30pxv;
+}
+div.decimal {
+  width: 845.34534pxv;
+  height: 35.3344pxv;
+  background: lightpink;
+}
 
-  div.zero-test {
-    margin: 20pxv 0pxv 50pxv;
-  }
+div.bobo {
+  width: 50.5pxv;
+}
+div.shorthand {
+  background: tomato;
+  color: #fff;
+  padding: 40pxv 20pxv 100pxv 50pxv;
+  margin: 400pxv 200pxv 99pxv 200pxv;
+}
+div.bordertest {
+  border: 15pxv solid pink;
+}
+
+div.weird-stuff {
+  margin: 20pxv calc(20pxv + calc(10pxv + 5%)) 50pxv;
+}
+
+div.zero-test {
+  margin: 20pxv 0pxv 50pxv;
+}
