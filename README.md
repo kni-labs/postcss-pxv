@@ -2,7 +2,7 @@
 
 A PostCSS plugin that introduces a new CSS unit: **`pxv`** — a pixel that scales with the viewport.  
 
-Sometimes layouts need the precision of pixels but the flexibility of percentages. That’s where `pxv` comes in: it’s like a pixel that flexes with the viewport.
+Sometimes layouts need the precision of pixels but the flexibility of viewport units. That’s where `pxv` comes in: it’s like a pixel that flexes with the viewport.
 
 **Input:**
 ```css
