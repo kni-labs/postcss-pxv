@@ -1,32 +1,36 @@
-# postcss-pxv
+<file name=0 path=/Users/danielbox/Downloads/README_v2.md># postcss-pxv
 
 A PostCSS plugin that introduces a new CSS unit: **`pxv`** — a pixel that scales with the viewport.  
 
-Instead of hand-writing `clamp()` everywhere, code can stay simple:  
+Instead of hand-writing `clamp()` everywhere, code can stay simple. Here’s how it works:
 
+**Input:**
 ```css
-h1 {
-  font-size: 24pxv;
+.box {
+  width: 300pxv;
   margin-bottom: 16pxv;
 }
 ```
 
-which transforms into:  
+**Output:**
+```css
+.box {
+  width: calc(300 * var(--pxvUnit));
+  margin-bottom: calc(16 * var(--pxvUnit));
+}
+```
 
+**Which compiles to (with default variables):**
 ```css
 :root {
   --siteBasis: 375;
   --siteMax: 600;
-  --pxvUnit: clamp(
-    0px,
-    calc((100 / var(--siteBasis)) * 1vw),
-    calc(1px * var(--siteMax) / var(--siteBasis))
-  );
+  --pxvUnit: clamp(0px, calc((100 / 375) * 1vw), calc(1px * 600 / 375));
 }
 
-h1 {
-  font-size: calc(24 * var(--pxvUnit));
-  margin-bottom: calc(16 * var(--pxvUnit));
+.box {
+  width: clamp(0px, calc(300vw * (100 / 375)), calc(300px * 600 / 375));
+  margin-bottom: clamp(0px, calc(16vw * (100 / 375)), calc(16px * 600 / 375));
 }
 ```
 
