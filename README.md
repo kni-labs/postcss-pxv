@@ -41,40 +41,6 @@ Using `pxv` means:
 - One shared formula in `:root` replaces hundreds of repeated `clamp()` calls
 - Adjusting scaling is as simple as tweaking two variables
 
-## 📉 Smaller CSS, fewer bytes
-
-Previously, every use of `pxv` generated a full `clamp()` expression inline, leading to significant repetition and larger CSS files. The improved approach now references a shared `--pxvUnit` variable, drastically reducing repetition and file size—often by up to ~75% for projects with many `pxv` values.
-
-### Before:
-
-```css
-h1 {
-  font-size: clamp(0px, calc(24vw * (100 / 375)), calc(24px * 600 / 375));
-  margin-bottom: clamp(0px, calc(16vw * (100 / 375)), calc(16px * 600 / 375));
-  padding-left: clamp(0px, calc(12vw * (100 / 375)), calc(12px * 600 / 375));
-}
-```
-
-### After:
-
-```css
-:root {
-  --siteBasis: 375;
-  --siteMax: 600;
-  --pxvUnit: clamp(
-    0px,
-    calc((100 / var(--siteBasis)) * 1vw),
-    calc(1px * var(--siteMax) / var(--siteBasis))
-  );
-}
-
-h1 {
-  font-size: calc(24 * var(--pxvUnit));
-  margin-bottom: calc(16 * var(--pxvUnit));
-  padding-left: calc(12 * var(--pxvUnit));
-}
-```
-
 ---
 
 ## ✅ Where it fits
@@ -143,6 +109,31 @@ This pattern keeps design tokens like `--mobile` and `--desktop` in one place, w
 
 Version 2 outputs cleaner, smaller CSS by centralizing the `clamp()` logic into a shared `--pxvUnit` variable.  
 The plugin automatically injects the needed variables (`--siteBasis`, `--siteMax`, `--pxvUnit`) if they’re not already defined, so it should just work out of the box.  
+
+Previously, every use of `pxv` generated a full `clamp()` expression inline, leading to significant repetition and larger CSS files. The improved approach now references a shared `--pxvUnit` variable, drastically reducing repetition and file size—often by up to ~75% for projects with many `pxv` values.
+
+### Before:
+
+```css
+h1 {
+  font-size: clamp(0px, calc(24vw * (100 / 375)), calc(24px * 600 / 375));
+  margin-bottom: clamp(0px, calc(16vw * (100 / 375)), calc(16px * 600 / 375));
+  padding-left: clamp(0px, calc(12vw * (100 / 375)), calc(12px * 600 / 375));
+}
+```
+
+### After:
+
+```css
+:root {
+  --siteBasis: 375;
+  --siteMax: 600;
+  --pxvUnit: clamp(
+    0px,
+    calc((100 / var(--siteBasis)) * 1vw),
+    calc(1px * var(--siteMax) / var(--siteBasis))
+  );
+}
 
 ---
 
