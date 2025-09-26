@@ -1,85 +1,175 @@
 # postcss-pxv
 
+A PostCSS plugin that introduces a new CSS unit: **`pxv`** — a pixel that scales with the viewport.  
 
-This plugin creates a new pixel-viewport unit of measurement called a `pxv`. 
+Instead of hand-writing `clamp()` everywhere, code can stay simple:  
 
-input:
 ```css
-div { width: 150pxv; }
+h1 {
+  font-size: 24pxv;
+  margin-bottom: 16pxv;
+}
 ```
-output:
-```css
- div { width: clamp(1px, calc(150vw * (100 / var(--siteBasis))), calc(150px * var(--siteMax) / var(--siteBasis))); }
-```
 
-"Wow, that looks insane!" you might say. And you'd be right, but there is very good reason for it all, and we've used this very successfully on some [large](https://www.bolt.com) [sites](https://www.washingtonspirit.com).
+which transforms into:  
 
-### When to use
-
-Use this when you want to reach for a `px` but need it to behave like a `vw` unit. Rule must support css `clamp()`:
-
-| ✅ Use with | ❌ Don't use with|
-| ----------| --------------|
-| `width`   | `font-size`*  |
-| `height`  |  |
-| `padding` |  |
-| `margin`  |  |
-| `left`, `right`, `top`, `bottom`  |  |
-| `box-shadow` | |
-| `border` | |
-
-* **Note:**`font-size` *does* support clamp but responsive typography needs a different solution to allow for the browser to still be able to use the zoom functionality. (Please see the 2.0 branch alpha release of  [kni-scss](https://github.com/kni-labs/kni-scss/tree/2.0) for this.)
-
-
-### Harnessing the power of css custom props
-
-By using css custom properties we can live inject a new "basis" for the scaling.
-
-The plugin requires two custom properties:
-
-- ` --siteBasis` - The size at which your layout was designed
-- ` --siteMax` - The size at which you want you comp to stop scaling
-
-In an example implementation you may have a site comped at `1440px`, `768px`, and `375px` for desktop, tablet, andd mobile respectively:
 ```css
 :root {
-    --mobile: 375;
-    --tablet: 768; 
-    --desktop: 1440; 
- 
-    --mobileMax: 600;
-    --tabletMax: 900;
-    --desktopMax: 1900;
+  --siteBasis: 375;
+  --siteMax: 600;
+  --pxvUnit: clamp(
+    0px,
+    calc((100 / var(--siteBasis)) * 1vw),
+    calc(1px * var(--siteMax) / var(--siteBasis))
+  );
+}
 
-    --siteBasis: var(--mobileMax); 
-    --siteMax: var(--siteMaxMobile);
-  }
+h1 {
+  font-size: calc(24 * var(--pxvUnit));
+  margin-bottom: calc(16 * var(--pxvUnit));
+}
 ```
-and in a very simple implementation we can handle 95% of all responsive elements with one media query:
-```css
 
-@media (min-width: 768px) {
-  * {
-    --siteBasis: var(--tablet);
-    --siteMax: var(--tabletMax);
+---
+
+## ✨ Why `pxv`?
+
+There are times when `px` feels natural but a value really needs to scale with the viewport. `pxv` acts like a pixel that knows how to flex:  
+
+- Scales predictably between a chosen basis and a max breakpoint  
+- Removes repetitive `clamp()` boilerplate  
+- Keeps scaling logic in one place (`:root`), so adjustments are easier  
+
+---
+
+## ✅ Where it fits
+
+Examples of properties that work well with `pxv`:  
+
+| Works well for | Not a good fit |
+|----------------|----------------|
+| `width`, `height` | `font-size`* |
+| `padding`, `margin` | |
+| `left`, `right`, `top`, `bottom` | |
+| `box-shadow`, `border` | |
+
+\* `font-size` supports `clamp()`, but responsive typography often benefits from a separate approach so zoom and accessibility are preserved. (See the 2.0 branch of [kni-scss](https://github.com/kni-labs/kni-scss/tree/2.0).)
+
+---
+
+## ⚙️ Configuration
+
+### PostCSS options
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: {
+    'postcss-pxv': {
+      min: 375,   // default
+      max: 600    // default
+    }
   }
 }
+```
+
+### Sample project setup
+
+A project might define breakpoints like this:
+
+```css
+:root {
+  --mobileMin: 320;
+  --mobile: 375;
+  --mobileMax: 600;
+
+  --desktopMin: 1024;
+  --desktop: 1440;
+  --desktopMax: 1800;
+
+  /* Mobile-first defaults */
+  --siteBasis: var(--mobile);
+  --siteMax: var(--mobileMax);
+}
+
 @media (min-width: 1024px) {
-  * {
+  :root {
     --siteBasis: var(--desktop);
     --siteMax: var(--desktopMax);
   }
 }
 ```
 
-### Installation
+This pattern keeps design tokens like `--mobile` and `--desktop` in one place, while `--siteBasis` and `--siteMax` act as pointers for scaling.
 
-`npm i postcss-pxv --save-dev`
+---
 
+## 🚨 Changes in v2.0
 
-### How to contribute
-for now: 
+- `pxv` now references a shared `--pxvUnit` variable instead of inlining `clamp()` for every value.  
+- The plugin injects `--siteBasis`, `--siteMax`, and `--pxvUnit` automatically.  
+- Existing values in `:root` are left untouched if already defined.  
 
-1. `npm i`
-2. edit `index.js` or `input.css`
-3. process css: `node process-css.js`
+---
+
+## 🔄 Upgrading from v1 to v2
+
+In v1, each `pxv` expanded inline:
+
+```css
+/* v1 output */
+h1 {
+  font-size: clamp(0px, calc(24vw * (100 / 375)), calc(24px * 600 / 375));
+}
+```
+
+In v2, the same value references a central variable:
+
+```css
+/* v2 output */
+:root {
+  --siteBasis: 375;
+  --siteMax: 600;
+  --pxvUnit: clamp(
+    0px,
+    calc((100 / var(--siteBasis)) * 1vw),
+    calc(1px * var(--siteMax) / var(--siteBasis))
+  );
+}
+
+h1 {
+  font-size: calc(24 * var(--pxvUnit));
+}
+```
+
+### Upgrade notes
+- If defaults work, nothing else is needed — the plugin injects them.  
+- If a project already has design tokens, `--siteBasis` and `--siteMax` can point to them:  
+
+```css
+:root {
+  --siteBasis: var(--mobile);
+  --siteMax: var(--mobileMax);
+}
+```
+
+That’s the only adjustment when moving from v1 to v2.  
+
+---
+
+## 📦 Installation
+
+```bash
+npm install -D postcss-pxv
+# or
+pnpm add -D postcss-pxv
+```
+
+---
+
+## 🛠️ Contributing
+
+1. Install dependencies: `npm install` or `pnpm install`  
+2. Edit `index.js`  
+3. Test locally with `node process-css.js` or link into a project  
+4. Open a PR 🚀  
