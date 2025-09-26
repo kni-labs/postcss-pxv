@@ -1,7 +1,11 @@
 const valueParser = require('postcss-value-parser');
 const postcss = require('postcss');
 
-module.exports = () => {
+module.exports = (opts = {}) => {
+  // allow overrides from options, fallback to defaults
+  const basis = opts.min || 375;
+  const max = opts.max || 600;
+
   return {
     postcssPlugin: 'postcss-pxv',
     Once(root) {
@@ -15,7 +19,7 @@ module.exports = () => {
       if (!rootRule) {
         rootRule = postcss.rule({
           selector: ':root',
-          source: root.source // inherit source info to avoid warnings
+          source: root.source
         });
         root.prepend(rootRule);
       }
@@ -33,18 +37,18 @@ module.exports = () => {
             postcss.decl({
               prop,
               value,
-              source: root.source // also attach source to decls
+              source: root.source
             })
           );
         }
       }
 
-      ensureVar(rootRule, '--siteBasis', '375');
-      ensureVar(rootRule, '--siteMax', '600');
+      ensureVar(rootRule, '--siteBasis', String(basis));
+      ensureVar(rootRule, '--siteMax', String(max));
       ensureVar(
         rootRule,
         '--pxvUnit',
-        'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
+        `clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))`
       );
 
       //
