@@ -6,23 +6,25 @@ module.exports = () => {
     postcssPlugin: 'postcss-pxv',
     Once(root) {
       //
-      // 1. Inject defaults if no :root found
+      // 1. Ensure :root exists (create if missing)
       //
-      const hasRoot = root.nodes.some(
+      let rootRule = root.nodes.find(
         (node) => node.type === 'rule' && node.selector === ':root'
       );
 
-      if (!hasRoot) {
-        const rootRule = postcss.rule({ selector: ':root' });
-        rootRule.append({ prop: '--siteBasis', value: '375' });
-        rootRule.append({ prop: '--siteMax', value: '600' });
-        rootRule.append({
-          prop: '--pxvUnit',
-          value:
-            'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))',
-        });
+      if (!rootRule) {
+        rootRule = postcss.rule({ selector: ':root' });
         root.prepend(rootRule);
       }
+
+      // Inject/update required vars
+      rootRule.append({ prop: '--siteBasis', value: '375' });
+      rootRule.append({ prop: '--siteMax', value: '600' });
+      rootRule.append({
+        prop: '--pxvUnit',
+        value:
+          'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))',
+      });
 
       //
       // 2. Convert pxv values
