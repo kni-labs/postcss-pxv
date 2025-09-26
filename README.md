@@ -166,6 +166,45 @@ h1 {
 }
 ```
 
+## ✏️ A note about certain shorthands
+
+Most CSS properties that take a **length** value (like `margin`, `padding`, `width`, `height`, `gap`, `font-size`, etc.) work perfectly with the short form output:
+
+```css
+margin: calc(20 * var(--pxvUnit));
+```
+
+However, some CSS **shorthand properties** mix multiple value types (e.g. a length + a keyword + a color). Examples:
+
+- `border` → width, style, color  
+- `outline` → width, style, color  
+- `font` → style, weight, size/line-height, family  
+- `text-decoration` → line, style, color, thickness  
+- `background` → color, image, position, size, repeat  
+- `flex` → grow, shrink, basis  
+- `grid` → various templates / tracks  
+- `columns` → width, count  
+
+For these shorthands, the CSS parser must decide *immediately* which token is a `<length>`, which is a `<keyword>`, and which is a `<color>`.  
+Because `var(--pxvUnit)` is a **custom property**, the parser doesn’t know its type at parse time — it could be anything.  
+That ambiguity can cause the entire shorthand to be ignored.  
+
+To prevent this, **postcss-pxv automatically expands pxv values inline** when it detects these properties. Example:
+
+```css
+/* Input */
+border: 2pxv solid green;
+
+/* Output */
+border-width: calc(2 * var(--pxvUnit));
+border: clamp(0px, calc(2vw * (100 / var(--siteBasis))), calc(2px * var(--siteMax) / var(--siteBasis))) solid green;
+```
+
+This ensures:
+- The shorthand remains syntactically valid (parser can see a `<length>` right away).  
+- The longhand still benefits from the short var-based form for consistency.  
+
+Everywhere else, you’ll get the compact output (`calc(N * var(--pxvUnit))`), keeping your CSS size small.  
 
 ---
 
