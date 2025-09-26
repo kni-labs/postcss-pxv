@@ -22,21 +22,7 @@ module.exports = () => {
         root.prepend(rootRule);
       }
 
-      // Shorthands that need full expansion
-      const shorthandProps = new Set([
-        'border',
-        'border-top',
-        'border-right',
-        'border-bottom',
-        'border-left',
-        'outline',
-      ]);
-
       root.walkDecls((decl) => {
-        const basis = 'var(--siteBasis)';
-        const max = 'var(--siteMax)';
-        const min = '0px';
-
         const convertValue = (value) => {
           const parsedValue = valueParser(value);
 
@@ -46,16 +32,7 @@ module.exports = () => {
 
               if (pxvValue === 0) {
                 node.value = '0';
-              } else if (shorthandProps.has(decl.prop)) {
-                // Inline full clamp for border/outline
-                if (pxvValue > 0) {
-                  node.value = `clamp(${min}, calc(${pxvValue}vw * (100 / ${basis})), calc(${pxvValue}px * ${max} / ${basis}))`;
-                } else {
-                  const absPxvValue = Math.abs(pxvValue);
-                  node.value = `clamp(calc(-${absPxvValue} * (100 / ${basis}) * 1vw), calc(-${absPxvValue}px * ${max} / ${basis}), -${min})`;
-                }
               } else {
-                // Default compact form
                 node.value = `calc(${pxvValue} * var(--pxvUnit))`;
               }
             }
