@@ -25,14 +25,14 @@ module.exports = () => {
       };
 
       // Defaults
-      ensureVar('--siteMin', '0');      // ✅ can override
-      ensureVar('--siteBasis', '375');
-      ensureVar('--siteMax', '600');
+      ensureVar('--siteMin', '0');      // floor (px), overrideable
+      ensureVar('--siteBasis', '375');  // basis (px)
+      ensureVar('--siteMax', '600');    // ceiling (px)
 
-      // Fluid unit
+      // ✅ Single proportional unit definition
       ensureVar(
         '--pxvUnit',
-        'calc((100 / var(--siteBasis)) * 1vw)'
+        'clamp(calc(1px * var(--siteMin) / var(--siteBasis)), calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
       );
 
       // Walk declarations for pxv replacement
@@ -44,23 +44,12 @@ module.exports = () => {
             const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
             if (pxvValue === 0) {
-              node.value = '0';
+              node.value = '0'; // clean zero
+            } else if (pxvValue > 0) {
+              node.value = `calc(${pxvValue} * var(--pxvUnit))`;
             } else {
               const absVal = Math.abs(pxvValue);
-
-              // Core clamp with min/basis/max
-              let clampExpr = `clamp(
-                calc(${absVal}px * var(--siteMin) / var(--siteBasis)),
-                calc(${absVal} * var(--pxvUnit)),
-                calc(${absVal}px * var(--siteMax) / var(--siteBasis))
-              )`;
-
-              // Preserve sign for negatives
-              if (pxvValue < 0) {
-                clampExpr = `calc(-1 * ${clampExpr})`;
-              }
-
-              node.value = clampExpr.replace(/\s+/g, ' '); // minify spaces
+              node.value = `calc(-${absVal} * var(--pxvUnit))`;
             }
           }
         });
