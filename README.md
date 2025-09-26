@@ -180,17 +180,43 @@ h1 {
 ```
 
 ### Upgrade notes
-- If defaults work, nothing else is needed — the plugin injects them.  
-- If a project already has design tokens, `--siteBasis` and `--siteMax` can point to them:  
+
+#### 🚀 What’s new in v2.0
+
+Version 2 outputs cleaner, smaller CSS by centralizing the `clamp()` logic into a shared `--pxvUnit` variable.  
+The plugin automatically injects the needed variables (`--siteBasis`, `--siteMax`, `--pxvUnit`) if they’re not already defined, so it should just work out of the box.  
+
+---
+
+#### 🔄 Upgrading from v1 to v2
+
+In v1, each `pxv` expanded inline:
 
 ```css
-:root {
-  --siteBasis: var(--mobile);
-  --siteMax: var(--mobileMax);
+/* v1 output */
+h1 {
+  font-size: clamp(0px, calc(24vw * (100 / 375)), calc(24px * 600 / 375));
 }
 ```
 
-That’s the only adjustment when moving from v1 to v2.  
+In v2, the same value references a central variable:
+
+```css
+/* v2 output */
+:root {
+  --siteBasis: 375;
+  --siteMax: 600;
+  --pxvUnit: clamp(
+    0px,
+    calc((100 / var(--siteBasis)) * 1vw),
+    calc(1px * var(--siteMax) / var(--siteBasis))
+  );
+}
+
+h1 {
+  font-size: calc(24 * var(--pxvUnit));
+}
+```
 
 ---
 
