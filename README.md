@@ -134,7 +134,7 @@ h1 {
     calc(1px * var(--siteMax) / var(--siteBasis))
   );
 }
-
+```
 ---
 
 ## 🔄 Upgrading from v1 to v2
