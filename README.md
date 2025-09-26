@@ -20,7 +20,7 @@ Instead of hand-writing `clamp()` everywhere, code can stay simple. Here’s how
 }
 ```
 
-**Which compiles to (with default variables):**
+**Which actually resolves in the browser to (with default variables):**
 ```css
 :root {
   --siteBasis: 375;
