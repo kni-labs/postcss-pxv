@@ -17,17 +17,29 @@ module.exports = () => {
         root.prepend(rootRule);
       }
 
-      // Inject/update required vars
-      rootRule.append({ prop: '--siteBasis', value: '375' });
-      rootRule.append({ prop: '--siteMax', value: '600' });
-      rootRule.append({
-        prop: '--pxvUnit',
-        value:
-          'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))',
-      });
+      //
+      // 2. Only add missing variables (don’t overwrite)
+      //
+      function ensureVar(rule, prop, value) {
+        const exists = rule.nodes.some(
+          (decl) => decl.type === 'decl' && decl.prop === prop
+        );
+
+        if (!exists) {
+          rule.append({ prop, value });
+        }
+      }
+
+      ensureVar(rootRule, '--siteBasis', '375');
+      ensureVar(rootRule, '--siteMax', '600');
+      ensureVar(
+        rootRule,
+        '--pxvUnit',
+        'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
+      );
 
       //
-      // 2. Convert pxv values
+      // 3. Convert pxv values → calc(... * var(--pxvUnit))
       //
       root.walkDecls((decl) => {
         const convertValue = (value) => {
