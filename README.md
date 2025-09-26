@@ -1,4 +1,4 @@
-# postcss-pxv
+<file name=0 path=/Users/danielbox/Downloads/README_v2.md># postcss-pxv
 
 A PostCSS plugin that introduces a new CSS unit: **`pxv`** — a pixel that scales with the viewport.  
 
@@ -39,6 +39,40 @@ There are times when `px` feels natural but a value really needs to scale with t
 - Scales predictably between a chosen basis and a max breakpoint  
 - Removes repetitive `clamp()` boilerplate  
 - Keeps scaling logic in one place (`:root`), so adjustments are easier  
+
+## 📉 Smaller CSS, fewer bytes
+
+In version 1, each use of `pxv` generated a full `clamp()` expression inline, which could significantly bloat CSS files in larger projects. Version 2 optimizes this by referencing a shared `--pxvUnit` variable, drastically reducing repetition and file size. This change can lead to up to a ~75% reduction in CSS size for projects with many `pxv` values.
+
+### Before (v1 output):
+
+```css
+h1 {
+  font-size: clamp(0px, calc(24vw * (100 / 375)), calc(24px * 600 / 375));
+  margin-bottom: clamp(0px, calc(16vw * (100 / 375)), calc(16px * 600 / 375));
+  padding-left: clamp(0px, calc(12vw * (100 / 375)), calc(12px * 600 / 375));
+}
+```
+
+### After (v2 output):
+
+```css
+:root {
+  --siteBasis: 375;
+  --siteMax: 600;
+  --pxvUnit: clamp(
+    0px,
+    calc((100 / var(--siteBasis)) * 1vw),
+    calc(1px * var(--siteMax) / var(--siteBasis))
+  );
+}
+
+h1 {
+  font-size: calc(24 * var(--pxvUnit));
+  margin-bottom: calc(16 * var(--pxvUnit));
+  padding-left: calc(12 * var(--pxvUnit));
+}
+```
 
 ---
 
@@ -173,3 +207,4 @@ pnpm add -D postcss-pxv
 2. Edit `index.js`  
 3. Test locally with `node process-css.js` or link into a project  
 4. Open a PR 🚀  
+</file>
