@@ -1,3 +1,6 @@
+const valueParser = require('postcss-value-parser');
+const postcss = require('postcss');
+
 module.exports = () => {
   return {
     postcssPlugin: 'postcss-pxv',
