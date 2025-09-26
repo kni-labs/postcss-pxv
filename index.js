@@ -5,23 +5,33 @@ module.exports = () => {
   return {
     postcssPlugin: 'postcss-pxv',
     Once(root) {
-      // Inject defaults if no :root present
-      const hasRoot = root.nodes.some(
+      // Ensure a :root exists
+      let rootRule = root.nodes.find(
         (node) => node.type === 'rule' && node.selector === ':root'
       );
-
-      if (!hasRoot) {
-        const rootRule = postcss.rule({ selector: ':root' });
-        rootRule.append({ prop: '--siteBasis', value: '375' });
-        rootRule.append({ prop: '--siteMax', value: '600' });
-        rootRule.append({
-          prop: '--pxvUnit',
-          value:
-            'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))',
-        });
+      if (!rootRule) {
+        rootRule = postcss.rule({ selector: ':root' });
         root.prepend(rootRule);
       }
 
+      // Ensure defaults exist inside :root
+      const ensureVar = (prop, value) => {
+        const already = rootRule.nodes.some(
+          (n) => n.type === 'decl' && n.prop === prop
+        );
+        if (!already) {
+          rootRule.append({ prop, value });
+        }
+      };
+
+      ensureVar('--siteBasis', '375');
+      ensureVar('--siteMax', '600');
+      ensureVar(
+        '--pxvUnit',
+        'clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
+      );
+
+      // Walk declarations for pxv replacement
       root.walkDecls((decl) => {
         const convertValue = (value) => {
           const parsedValue = valueParser(value);
