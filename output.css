@@ -5,38 +5,39 @@
     --siteMaxMobile: 600;
     --siteMaxDesktop: 1600;
     --siteMax: var(--siteMaxMobile);
+    --pxvUnit: clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)));
   }
   
  
   
   div.border {
-    width: clamp(1px, calc(150vw * (100 / var(--siteBasis))), calc(150px * var(--siteMax) / var(--siteBasis)));
-    padding: clamp(1px, calc(12vw * (100 / var(--siteBasis))), calc(12px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(13vw * (100 / var(--siteBasis))), calc(13px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(15vw * (100 / var(--siteBasis))), calc(15px * var(--siteMax) / var(--siteBasis)));
-    border: clamp(1px, calc(5vw * (100 / var(--siteBasis))), calc(5px * var(--siteMax) / var(--siteBasis))) solid blue;
+    width: calc(150 * var(--pxvUnit));
+    padding: calc(12 * var(--pxvUnit)) calc(100 * var(--pxvUnit)) calc(13 * var(--pxvUnit)) calc(15 * var(--pxvUnit));
+    border: calc(5 * var(--pxvUnit)) solid blue;
   }
   div.absolute {
     position: absolute;
-    top: clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
-    right: clamp(calc(-99 * (100 / var(--siteBasis)) * 1vw), calc(-99px * var(--siteMax) / var(--siteBasis)), -1px);
-    width: clamp(1px, calc(490vw * (100 / var(--siteBasis))), calc(490px * var(--siteMax) / var(--siteBasis)));
+    top: calc(50 * var(--pxvUnit));
+    right: calc(-99 * var(--pxvUnit));
+    width: calc(490 * var(--pxvUnit));
     height: 44.5px;
-    border: clamp(1px, calc(1vw * (100 / var(--siteBasis))), calc(1px * var(--siteMax) / var(--siteBasis))) solid green;
+    border: calc(1 * var(--pxvUnit)) solid green;
     background: palegoldenrod;
   }
   div.negativeval {
-    border: clamp(1px, calc(4vw * (100 / var(--siteBasis))), calc(4px * var(--siteMax) / var(--siteBasis))) solid brown;
+    border: calc(4 * var(--pxvUnit)) solid brown;
     background: paleturquoise;
-    width: clamp(1px, calc(300vw * (100 / var(--siteBasis))), calc(300px * var(--siteMax) / var(--siteBasis)));
-    height: clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis)));
-    margin-left: clamp(calc(-30 * (100 / var(--siteBasis)) * 1vw), calc(-30px * var(--siteMax) / var(--siteBasis)), -1px);
+    width: calc(300 * var(--pxvUnit));
+    height: calc(200 * var(--pxvUnit));
+    margin-left: calc(-30 * var(--pxvUnit));
   }
   div.decimal {
-    width: clamp(1px, calc(845.34534vw * (100 / var(--siteBasis))), calc(845.34534px * var(--siteMax) / var(--siteBasis)));
-    height: clamp(1px, calc(35.3344vw * (100 / var(--siteBasis))), calc(35.3344px * var(--siteMax) / var(--siteBasis)));
+    width: calc(845.34534 * var(--pxvUnit));
+    height: calc(35.3344 * var(--pxvUnit));
     background: lightpink;
   }
   @media (min-width: 1024px) {
-    * {
+    :root {
       --siteBasis: var(--siteBasisDesktop);
       --siteMax: var(--siteMaxDesktop);
     }
@@ -47,22 +48,22 @@
   }
 
   div.bobo {
-    width: clamp(1px, calc(50.5vw * (100 / var(--siteBasis))), calc(50.5px * var(--siteMax) / var(--siteBasis)));
+    width: calc(50.5 * var(--pxvUnit));
   }
   div.shorthand {
     background: tomato;
     color: #fff;
-    padding: clamp(1px, calc(40vw * (100 / var(--siteBasis))), calc(40px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(100vw * (100 / var(--siteBasis))), calc(100px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
-    margin: clamp(1px, calc(400vw * (100 / var(--siteBasis))), calc(400px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(99vw * (100 / var(--siteBasis))), calc(99px * var(--siteMax) / var(--siteBasis))) clamp(1px, calc(200vw * (100 / var(--siteBasis))), calc(200px * var(--siteMax) / var(--siteBasis)));
+    padding: calc(40 * var(--pxvUnit)) calc(20 * var(--pxvUnit)) calc(100 * var(--pxvUnit)) calc(50 * var(--pxvUnit));
+    margin: calc(400 * var(--pxvUnit)) calc(200 * var(--pxvUnit)) calc(99 * var(--pxvUnit)) calc(200 * var(--pxvUnit));
   }
   div.bordertest {
-    border: clamp(1px, calc(15vw * (100 / var(--siteBasis))), calc(15px * var(--siteMax) / var(--siteBasis))) solid pink;
+    border: calc(15 * var(--pxvUnit)) solid pink;
   }
 
   div.weird-stuff {
-    margin: clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) calc(clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) + calc(clamp(1px, calc(10vw * (100 / var(--siteBasis))), calc(10px * var(--siteMax) / var(--siteBasis))) + 5%)) clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
+    margin: calc(20 * var(--pxvUnit)) calc(calc(20 * var(--pxvUnit)) + calc(calc(10 * var(--pxvUnit)) + 5%)) calc(50 * var(--pxvUnit));
   }
 
   div.zero-test {
-    margin: clamp(1px, calc(20vw * (100 / var(--siteBasis))), calc(20px * var(--siteMax) / var(--siteBasis))) 0 clamp(1px, calc(50vw * (100 / var(--siteBasis))), calc(50px * var(--siteMax) / var(--siteBasis)));
+    margin: calc(20 * var(--pxvUnit)) 0 calc(50 * var(--pxvUnit));
   }

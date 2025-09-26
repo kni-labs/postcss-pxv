@@ -36,7 +36,7 @@
     background: lightpink;
   }
   @media (min-width: 1024px) {
-    * {
+    :root {
       --siteBasis: var(--siteBasisDesktop);
       --siteMax: var(--siteMaxDesktop);
     }
