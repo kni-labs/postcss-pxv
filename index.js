@@ -33,25 +33,23 @@ module.exports = () => {
 
       // Walk declarations for pxv replacement
       root.walkDecls((decl) => {
-        const convertValue = (value) => {
-          const parsedValue = valueParser(value);
+        const parsedValue = valueParser(decl.value);
 
-          parsedValue.walk((node) => {
-            if (node.type === 'word' && /^[0-9.-]+pxv$/i.test(node.value)) {
-              const pxvValue = parseFloat(node.value.replace('pxv', ''));
+        parsedValue.walk((node) => {
+          if (node.type === 'word' && /^[0-9.-]+pxv$/i.test(node.value)) {
+            const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
-              if (pxvValue === 0) {
-                node.value = '0';
-              } else {
-                node.value = `calc(${pxvValue} * var(--pxvUnit))`;
-              }
+            if (pxvValue === 0) {
+              node.value = '0';
+            } else {
+              // Replace only the pxv token
+              node.value = `calc(${pxvValue} * var(--pxvUnit))`;
             }
-          });
+          }
+        });
 
-          return parsedValue.toString();
-        };
-
-        decl.value = convertValue(decl.value);
+        // Rebuild declaration value from tokens
+        decl.value = parsedValue.toString();
       });
     },
   };
