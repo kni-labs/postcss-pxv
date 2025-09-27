@@ -1,63 +1,173 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, sans-serif;
+  --siteMin: 0; /* testing to see if manually adding fixes vercel deploy */
+  --siteBasis: 375; /* testing to see if manually adding fixes vercel deploy */
+  --siteMax: 600; /* testing to see if manually adding fixes vercel deploy */
+  --font-min-clamp: 10px; /* global floor */
+  --font-max-clamp: 9999px; /* global "no ceiling" */
+  --font-size: 16pxv; /* overwritten per element */
 }
 
-@media (min-width: 601px) {
+@media (min-width: 900px) {
   :root {
-    --siteMin: 900;
+    --siteMin: 1024;
     --siteBasis: 1440;
-    --siteMax: 2500;
+    --siteMax: 2000;
   }
 }
-h1 {
-  font-size: 16pxv; /* should be transformed by your plugin */
-  line-height: 24pxv; /* another example */
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: clamp(
+    var(--font-min-clamp),
+    var(--font-size),
+    var(--font-max-clamp)
+  );
 }
 
-div.border {
+h1 {
+  --font-size: 32pxv;
+  @media (min-width: 900px) {
+    --font-size: 54pxv;
+  }
+}
+
+/* Typography */
+.typography {
+  --ff: 14px;
+  --cf: 9999px;
+  font-size: clamp(var(--ff), 16pxv, var(--cf));
+  line-height: 24pxv;
+  background: #f0f0f0;
+  padding: 10px;
+}
+
+/* Box Model */
+.border {
   width: 150pxv;
   padding: 12pxv 100pxv 13pxv 15pxv;
   border: 5pxv solid blue;
+  margin-bottom: 20px;
 }
-div.absolute {
+
+.shorthand {
+  background: tomato;
+  color: white;
+  padding: 40pxv 20pxv 100pxv 50pxv;
+  margin: 40pxv 20pxv 99pxv 20pxv;
+}
+
+.decimal {
+  width: 845.34534pxv;
+  height: 35.3344pxv;
+  background: lightpink;
+  margin-bottom: 20px;
+}
+
+.zero-test {
+  margin: 20pxv 0pxv 50pxv;
+  background: lightgreen;
+}
+
+/* Positioning */
+.absolute {
   position: absolute;
   top: 50pxv;
   right: 50pxv;
   width: 290pxv;
   height: 44.5px;
-  border: 50pxv solid green;
+  border: 10pxv solid green;
   background: palegoldenrod;
 }
-div.negativeval {
+
+.negativeval {
   border: 4pxv solid brown;
   background: paleturquoise;
   width: 300pxv;
   height: 200pxv;
   margin-left: -30pxv;
-}
-div.decimal {
-  width: 845.34534pxv;
-  height: 35.3344pxv;
-  background: lightpink;
+  margin-top: 250px;
 }
 
-div.bobo {
-  width: 50.5pxv;
-}
-div.shorthand {
-  background: tomato;
-  color: #fff;
-  padding: 40pxv 20pxv 100pxv 50pxv;
-  margin: 400pxv 200pxv 99pxv 200pxv;
-}
-div.bordertest {
-  border: 15pxv solid pink;
-}
-
-div.weird-stuff {
+/* Expressions */
+.weird-stuff {
   margin: 20pxv calc(20pxv + calc(10pxv + 5%)) 50pxv;
+  background: #eee;
+  padding: 10px;
 }
 
-div.zero-test {
-  margin: 20pxv 0pxv 50pxv;
+/* Grid & Flex */
+.grid {
+  display: grid;
+  grid-template-columns: 100pxv 1fr 200pxv;
+  gap: 20pxv;
+  margin-bottom: 20px;
+}
+.grid div {
+  background: lightblue;
+  padding: 10px;
+}
+.flex {
+  display: flex;
+  gap: 15pxv;
+}
+.flex div {
+  background: peachpuff;
+  padding: 10px;
+}
+
+/* Pseudo-elements */
+.pseudo::before {
+  content: "before";
+  display: inline-block;
+  margin-right: 10pxv;
+  padding: 4pxv;
+  background: gold;
+}
+
+/* Form Elements */
+.test-input {
+  padding: 8pxv;
+  border: 2pxv solid teal;
+  border-radius: 6pxv;
+  margin: 10pxv 0;
+}
+
+/* Media Queries */
+.mq-test {
+  padding: 20pxv;
+  background: lavender;
+}
+@media (min-width: 1600px) {
+  .mq-test {
+    padding: 40pxv;
+    background: lightsteelblue;
+  }
+}
+
+/* Other CSS properties */
+.extras {
+  width: 120pxv;
+  height: 80pxv;
+  background: pink;
+  border-radius: 12pxv;
+  box-shadow: 5pxv 5pxv 10pxv rgba(0, 0, 0, 0.25);
+  transform: translate(20pxv, 10pxv);
+}
+
+/* Selector variety */
+ul li {
+  margin-bottom: 12pxv;
+}
+#unique {
+  padding: 16pxv;
+  background: lightcyan;
+}
+article > h2 {
+  margin-top: 24pxv;
 }
