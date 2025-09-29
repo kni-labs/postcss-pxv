@@ -49,12 +49,13 @@ Examples of properties that work well with `pxv`:
 
 | Works well for | Not a good fit |
 |----------------|----------------|
-| `width`, `height` | `font-size`* |
+| `width`, `height` |  |
 | `padding`, `margin` | |
 | `left`, `right`, `top`, `bottom` | |
 | `box-shadow`, `border` | |
+|`font-size`*| |
 
-\* `font-size` supports `clamp()`, but responsive typography often benefits from a separate approach so zoom and accessibility are preserved. (See the 2.0 branch of [kni-scss](https://github.com/kni-labs/kni-scss/tree/2.0).)
+\* works now! See kni-scss v8 for usage
 
 ---
 
