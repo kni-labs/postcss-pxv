@@ -113,33 +113,6 @@ The plugin automatically injects the needed variables (`--siteBasis`, `--siteMax
 
 Previously, every use of `pxv` generated a full `clamp()` expression inline, leading to significant repetition and larger CSS files. The improved approach now references a shared `--pxvUnit` variable, drastically reducing repetition and file size—often by up to ~75% for projects with many `pxv` values.
 
-### Before:
-
-```css
-h1 {
-  font-size: clamp(0px, calc(24vw * (100 / 375)), calc(24px * 600 / 375));
-  margin-bottom: clamp(0px, calc(16vw * (100 / 375)), calc(16px * 600 / 375));
-  padding-left: clamp(0px, calc(12vw * (100 / 375)), calc(12px * 600 / 375));
-}
-```
-
-### After:
-
-```css
-:root {
-  --siteBasis: 375;
-  --siteMax: 600;
-  --pxvUnit: clamp(
-    0px,
-    calc((100 / var(--siteBasis)) * 1vw),
-    calc(1px * var(--siteMax) / var(--siteBasis))
-  );
-}
-```
----
-
-
-In v1, each `pxv` expanded inline:
 
 ```css
 /* v1 output */
@@ -165,7 +138,7 @@ In v2, the same value references a central variable:
 h1 {
   font-size: calc(24 * var(--pxvUnit));
 }
-``
+```
 
 ## 📦 Installation
 
