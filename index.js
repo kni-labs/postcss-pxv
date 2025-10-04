@@ -1,63 +1,85 @@
 const valueParser = require('postcss-value-parser');
 const postcss = require('postcss');
 
-module.exports = () => {
+module.exports = (opts = {}) => {
+  // Default settings
+  const defaults = {
+    siteMin: 0,
+    siteBasis: 375,
+    siteMax: 767,
+    vars: {
+      min: '--site-min',
+      basis: '--site-basis',
+      max: '--site-max',
+      unit: '--pxv-unit',
+    },
+    writeVars: true, // set to false if project already defines them
+  };
+
+  // Merge user config
+  const settings = {
+    ...defaults,
+    ...opts,
+    vars: { ...defaults.vars, ...(opts.vars || {}) },
+  };
+
   return {
     postcssPlugin: 'postcss-pxv',
 
     Once(root) {
-      // Ensure a :root exists
-      let rootRule = root.nodes.find(
-        (node) => node.type === 'rule' && node.selector === ':root'
-      );
-      if (!rootRule) {
-        rootRule = postcss.rule({ selector: ':root' });
-        root.prepend(rootRule);
+      let rootRule;
+
+      // Ensure a :root exists if we're writing vars
+      if (settings.writeVars) {
+        rootRule = root.nodes.find(
+          (node) => node.type === 'rule' && node.selector === ':root'
+        );
+        if (!rootRule) {
+          rootRule = postcss.rule({ selector: ':root' });
+          root.prepend(rootRule);
+        }
+
+        // Helper to append var if missing
+        const ensureVar = (prop, value) => {
+          const exists = rootRule.nodes.some(
+            (n) => n.type === 'decl' && n.prop === prop
+          );
+          if (!exists) rootRule.append({ prop, value });
+        };
+
+        // Write vars only if allowed
+        ensureVar(settings.vars.min, settings.siteMin.toString());
+        ensureVar(settings.vars.basis, settings.siteBasis.toString());
+        ensureVar(settings.vars.max, settings.siteMax.toString());
+        ensureVar(
+          settings.vars.unit,
+          `clamp(
+            calc(1px * var(${settings.vars.min}) / var(${settings.vars.basis})),
+            calc((100 / var(${settings.vars.basis})) * 1vw),
+            calc(1px * var(${settings.vars.max}) / var(${settings.vars.basis}))
+          )`
+        );
       }
 
-      // Helper to ensure vars exist in :root
-      const ensureVar = (prop, value) => {
-        const already = rootRule.nodes.some(
-          (n) => n.type === 'decl' && n.prop === prop
-        );
-        if (!already) {
-          rootRule.append({ prop, value });
-        }
-      };
-
-      // Default tokens
-      ensureVar('--siteMin', '0');      // floor (px), overrideable
-      ensureVar('--siteBasis', '375');  // basis (px)
-      ensureVar('--siteMax', '600');    // ceiling (px)
-
-      // ✅ One reusable proportional unit
-      ensureVar(
-        '--pxvUnit',
-        'clamp(calc(1px * var(--siteMin) / var(--siteBasis)), calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)))'
-      );
-
-      // Walk declarations for pxv replacement
+      // Replace pxv values
       root.walkDecls((decl) => {
-        if (!decl.value.includes('pxv')) return;
+        const parsed = valueParser(decl.value);
 
-        const parsedValue = valueParser(decl.value);
-
-        parsedValue.walk((node) => {
+        parsed.walk((node) => {
           if (node.type === 'word' && /^[0-9.-]+pxv$/i.test(node.value)) {
             const pxvValue = parseFloat(node.value.replace('pxv', ''));
 
             if (pxvValue === 0) {
-              node.value = '0'; // clean zero
-            } else if (pxvValue > 0) {
-              node.value = `calc(${pxvValue} * var(--pxvUnit))`;
+              node.value = '0';
             } else {
               const absVal = Math.abs(pxvValue);
-              node.value = `calc(-${absVal} * var(--pxvUnit))`;
+              const sign = pxvValue < 0 ? '-' : '';
+              node.value = `calc(${sign}${absVal} * var(${settings.vars.unit}))`;
             }
           }
         });
 
-        decl.value = parsedValue.toString();
+        decl.value = parsed.toString();
       });
     },
   };
