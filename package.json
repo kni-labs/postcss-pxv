@@ -1,7 +1,7 @@
 {
   "name": "postcss-pxv",
   "version": "2.0.0",
-  "description": "leaner output / --pxvUnit",
+  "description": "A pixel that scales with the viewport",
   "main": "index.js",
   "scripts": {
     "build": "node process-css.js",
