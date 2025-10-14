@@ -43,66 +43,37 @@ Using `pxv` means:
 
 ---
 
-## ✅ Where it fits
-
-Examples of properties that work well with `pxv`:  
-
-| Works well for | Not a good fit |
-|----------------|----------------|
-| `width`, `height` |  |
-| `padding`, `margin` | |
-| `left`, `right`, `top`, `bottom` | |
-| `box-shadow`, `border` | |
-|`font-size`*| |
-
-\* works now! See kni-scss v8 for usage
-
----
 
 ## ⚙️ Configuration
 
-### PostCSS options
+** Note:** `v2.x` has configuration changes
+
+
+
+Add `postcss-pxv` to your PostCSS pipeline, then configure it in your `postcss.config.js` file.
 
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: {
-    'postcss-pxv': {
-      min: 375,   // default
-      max: 600    // default
-    }
-  }
+  plugins: [
+    require('postcss-pxv')({
+      // 🔧 Main settings
+      siteMin: 0,               // Minimum viewport width in px
+      siteBasis: 375,           // Reference design width
+      siteMax: 767,             // Maximum viewport width in px
+      writeVars: false,         // Automatically injects CSS variables into :root
+
+      // 🎛 Optional variable overrides (use if your CSS tokens differ)
+      vars: {
+        min: '--siteMin',       // default: --site-min
+        basis: '--siteBasis',   // default: --site-basis
+        max: '--siteMax',       // default: --site-max
+        unit: '--pxvUnit'       // default: --pxv-unit
+      }
+    })
+  ]
 }
 ```
-
-### Sample project setup
-
-A project might define breakpoints like this:
-
-```css
-:root {
-  --mobileMin: 320;
-  --mobile: 375;
-  --mobileMax: 600;
-
-  --desktopMin: 1024;
-  --desktop: 1440;
-  --desktopMax: 1800;
-
-  /* Mobile-first defaults */
-  --siteBasis: var(--mobile);
-  --siteMax: var(--mobileMax);
-}
-
-@media (min-width: 1024px) {
-  :root {
-    --siteBasis: var(--desktop);
-    --siteMax: var(--desktopMax);
-  }
-}
-```
-
-This pattern keeps design tokens like `--mobile` and `--desktop` in one place, while `--siteBasis` and `--siteMax` act as pointers for scaling.
 
 ---
 
