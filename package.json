@@ -1,17 +1,42 @@
 {
   "name": "postcss-pxv",
   "version": "2.0.0",
-  "description": "A pixel that scales with the viewport",
+  "description": "A PostCSS plugin that converts pxv units into fluid, viewport-scaled values using clamp().",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "build": "node process-css.js",
-    "prepublishOnly": "npm i && npm run build"
+    "prepublishOnly": "npm install && npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "postcss",
+    "plugin",
+    "viewport",
+    "fluid",
+    "responsive",
+    "clamp",
+    "css",
+    "pxv",
+    "unit"
+  ],
   "author": "Daniel Box",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kni-labs/postcss-pxv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kni-labs/postcss-pxv/issues"
+  },
+  "homepage": "https://github.com/kni-labs/postcss-pxv#readme",
+  "peerDependencies": {
+    "postcss": "^8.0.0"
+  },
   "devDependencies": {
     "postcss": "^8.4.24",
     "postcss-value-parser": "^4.2.0"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
