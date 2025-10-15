@@ -1,28 +1,134 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="output.css">
-</head>
-<body>
-  <h3>Border test</h3>
-  <div class="border">borders are cool</div>
-  <hr>
-  <h3>Absolule positioning</h3>
-  <div class="absolute">i'm absolute</div>
-  <h3>Negative value above largest breakpoint</h3>
-  <div class="negativeval">For Trevor</div>
-    <hr>
-  <h3>Decimal Test</h3>
-  <div class="decimal">decimal stuff</div>
-  <hr>
-  <h3>Shorthand test</h3>
-  <div class="shorthand">shorthand! who knew</div>
-  <hr>
-  <h3>weird stuff</h3>
-  <div class="weird-stuff">a non-pxv value with spaces</div>
-  <hr>
-  <h3>Zero value</h3>
-  <div class="zero-test">a 0pxv value</div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>postcss-pxv Tests</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>postcss-pxv Test Cases</h1>
+    <p>
+      Resize the window to see how <code>pxv</code> values scale between
+      <code>--siteMin</code>, <code>--siteBasis</code>, and
+      <code>--siteMax</code>.
+    </p>
 
-</body>
+    <section>
+      <h2>Typography</h2>
+      <p class="typography">
+        This paragraph uses our new scalable typography which seems to work
+        perfectly with all browser zoom functionality. I'm assuming this was
+        mosltly fixed once clamp became standard.
+      </p>
+    </section>
+
+    <section>
+      <h2>Box Model</h2>
+      <div class="border">Border & padding test</div>
+      <div class="shorthand">Shorthand padding + margin</div>
+      <div class="decimal">Decimal pxv values</div>
+      <div class="zero-test">Zero pxv value (margin-top = 0)</div>
+    </section>
+
+    <section>
+      <h2>Positioning</h2>
+      <div class="absolute">Absolutely positioned box</div>
+      <div class="negativeval">Negative margin-left test</div>
+    </section>
+
+    <section>
+      <h2>Expressions</h2>
+      <div class="weird-stuff">Nested calc() with pxv</div>
+    </section>
+
+    <section>
+      <h2>Grid & Flex Layout</h2>
+      <div class="grid">
+        <div>A</div>
+        <div>B</div>
+        <div>C</div>
+      </div>
+      <div class="flex">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Pseudo-elements</h2>
+      <div class="pseudo">This has a ::before element</div>
+    </section>
+
+    <section>
+      <h2>Form Elements</h2>
+      <input type="text" class="test-input" placeholder="Type here..." />
+    </section>
+
+    <section>
+      <h2>Media Query Test</h2>
+      <div class="mq-test">This padding changes at 1600px</div>
+    </section>
+
+    <section>
+      <h2>Other CSS Properties</h2>
+      <div class="extras">Box with radius, shadow, and translate</div>
+    </section>
+
+    <section>
+      <h2>Selectors Variety</h2>
+      <ul>
+        <li>List item 1</li>
+        <li>List item 2</li>
+      </ul>
+      <div id="unique">I am an ID selector</div>
+      <article>
+        <h2>Article Heading</h2>
+        <p>Some text here</p>
+      </article>
+    </section>
+
+    <!-- Info panel -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const info = document.createElement("div");
+        info.style.position = "fixed";
+        info.style.top = "0";
+        info.style.right = "0";
+        info.style.background = "rgba(0,0,0,0.85)";
+        info.style.color = "white";
+        info.style.fontFamily = "system-ui, sans-serif";
+        info.style.fontSize = "14px";
+        info.style.lineHeight = "1.4";
+        info.style.padding = "8px 12px";
+        info.style.zIndex = "9999";
+        info.style.borderBottomLeftRadius = "6px";
+        info.style.pointerEvents = "none";
+        document.body.appendChild(info);
+
+        function cssVar(name) {
+          return getComputedStyle(document.documentElement)
+            .getPropertyValue(name)
+            .trim();
+        }
+
+        function updateInfo() {
+          const vw = window.innerWidth;
+          const siteMin = cssVar("--siteMin") || "—";
+          const siteBasis = cssVar("--siteBasis") || "—";
+          const siteMax = cssVar("--siteMax") || "—";
+          info.innerHTML = `
+            <div><strong>Viewport:</strong> ${vw}px</div>
+            <div><strong>siteMin:</strong> ${siteMin}</div>
+            <div><strong>siteBasis:</strong> ${siteBasis}</div>
+            <div><strong>siteMax:</strong> ${siteMax}</div>
+          `;
+        }
+
+        updateInfo();
+        window.addEventListener("resize", updateInfo);
+      });
+    </script>
+  </body>
 </html>

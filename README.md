@@ -1,85 +1,133 @@
 # postcss-pxv
 
+A PostCSS plugin that introduces a new CSS unit: **`pxv`** — a pixel that scales with the viewport.  
 
-This plugin creates a new pixel-viewport unit of measurement called a `pxv`. 
+Sometimes layouts need the precision of pixels but the flexibility of viewport units. That’s where `pxv` comes in: it’s like a pixel that flexes with the viewport.
 
-input:
+**Input:**
 ```css
-div { width: 150pxv; }
+.box {
+  width: 300pxv;
+  margin-bottom: 16pxv;
+}
 ```
-output:
+
+**Output:**
 ```css
- div { width: clamp(1px, calc(150vw * (100 / var(--siteBasis))), calc(150px * var(--siteMax) / var(--siteBasis))); }
+.box {
+  width: calc(300 * var(--pxvUnit));
+  margin-bottom: calc(16 * var(--pxvUnit));
+}
 ```
 
-"Wow, that looks insane!" you might say. And you'd be right, but there is very good reason for it all, and we've used this very successfully on some [large](https://www.bolt.com) [sites](https://www.washingtonspirit.com).
-
-### When to use
-
-Use this when you want to reach for a `px` but need it to behave like a `vw` unit. Rule must support css `clamp()`:
-
-| ✅ Use with | ❌ Don't use with|
-| ----------| --------------|
-| `width`   | `font-size`*  |
-| `height`  |  |
-| `padding` |  |
-| `margin`  |  |
-| `left`, `right`, `top`, `bottom`  |  |
-| `box-shadow` | |
-| `border` | |
-
-* **Note:**`font-size` *does* support clamp but responsive typography needs a different solution to allow for the browser to still be able to use the zoom functionality. (Please see the 2.0 branch alpha release of  [kni-scss](https://github.com/kni-labs/kni-scss/tree/2.0) for this.)
-
-
-### Harnessing the power of css custom props
-
-By using css custom properties we can live inject a new "basis" for the scaling.
-
-The plugin requires two custom properties:
-
-- ` --siteBasis` - The size at which your layout was designed
-- ` --siteMax` - The size at which you want you comp to stop scaling
-
-In an example implementation you may have a site comped at `1440px`, `768px`, and `375px` for desktop, tablet, andd mobile respectively:
+**Which looks like this when computed (note actual code is much trimmer):**
 ```css
 :root {
-    --mobile: 375;
-    --tablet: 768; 
-    --desktop: 1440; 
- 
-    --mobileMax: 600;
-    --tabletMax: 900;
-    --desktopMax: 1900;
+  --siteBasis: 375;
+  --siteMax: 600;
+  --pxvUnit: clamp(0px, calc((100 / 375) * 1vw), calc(1px * 600 / 375));
+}
 
-    --siteBasis: var(--mobileMax); 
-    --siteMax: var(--siteMaxMobile);
-  }
+.box {
+  width: clamp(0px, calc(300vw * (100 / 375)), calc(300px * 600 / 375));
+  margin-bottom: clamp(0px, calc(16vw * (100 / 375)), calc(16px * 600 / 375));
+}
 ```
-and in a very simple implementation we can handle 95% of all responsive elements with one media query:
+
+---
+
+Using `pxv` means:
+- Layout values stay proportional as screens get bigger or smaller
+- One shared formula in `:root` replaces hundreds of repeated `clamp()` calls
+- Adjusting scaling is as simple as tweaking two variables
+
+---
+
+
+## ⚙️ Configuration
+
+** Note:** `v2.x` has configuration changes
+
+
+
+Add `postcss-pxv` to your PostCSS pipeline, then configure it in your `postcss.config.js` file.
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require('postcss-pxv')({
+      // 🔧 Main settings
+      siteMin: 0,               // Minimum viewport width in px
+      siteBasis: 375,           // Reference design width
+      siteMax: 767,             // Maximum viewport width in px
+      writeVars: false,         // Automatically injects CSS variables into :root
+
+      // 🎛 Optional variable overrides (use if your CSS tokens differ)
+      vars: {
+        min: '--siteMin',       // default: --site-min
+        basis: '--siteBasis',   // default: --site-basis
+        max: '--siteMax',       // default: --site-max
+        unit: '--pxvUnit'       // default: --pxv-unit
+      }
+    })
+  ]
+}
+```
+Then add this line to your code:
+``` scss
+--pxvUnit: clamp(0px, calc((100 / 375) * 1vw), calc(1px * 600 / 375));
+```
+
+---
+
+## 🚀 What’s new in v2.0
+
+Version 2 outputs cleaner, smaller CSS by centralizing the `clamp()` logic into a shared `--pxvUnit` variable.  
+The plugin automatically injects the needed variables (`--siteBasis`, `--siteMax`, `--pxvUnit`) if they’re not already defined, so it should just work out of the box.  
+
+Previously, every use of `pxv` generated a full `clamp()` expression inline, leading to significant repetition and larger CSS files. The improved approach now references a shared `--pxvUnit` variable, drastically reducing repetition and file size—often by up to ~75% for projects with many `pxv` values.
+
+
 ```css
-
-@media (min-width: 768px) {
-  * {
-    --siteBasis: var(--tablet);
-    --siteMax: var(--tabletMax);
-  }
-}
-@media (min-width: 1024px) {
-  * {
-    --siteBasis: var(--desktop);
-    --siteMax: var(--desktopMax);
-  }
+/* v1 output */
+h1 {
+  font-size: clamp(0px, calc(24vw * (100 / 375)), calc(24px * 600 / 375));
 }
 ```
 
-### Installation
+In v2, the same value references a central variable:
 
-`npm i postcss-pxv --save-dev`
+```css
+/* v2 output */
+:root {
+  --siteBasis: 375;
+  --siteMax: 600;
+  --pxvUnit: clamp(
+    0px,
+    calc((100 / var(--siteBasis)) * 1vw),
+    calc(1px * var(--siteMax) / var(--siteBasis))
+  );
+}
 
+h1 {
+  font-size: calc(24 * var(--pxvUnit));
+}
+```
 
-### How to contribute
-for now: 
+## 📦 Installation
 
-1. `npm i`
-2. edit `index.js` or `input.css`
-3. process css: `node process-css.js`
+```bash
+npm install -D postcss-pxv
+# or
+pnpm add -D postcss-pxv
+```
+
+---
+
+## 🛠️ Contributing
+
+1. Install dependencies: `npm install` or `pnpm install`  
+2. Edit `index.js`  
+3. Test locally with `node process-css.js` or link into a project  
+4. Open a PR 🚀  
