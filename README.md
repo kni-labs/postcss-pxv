@@ -74,6 +74,10 @@ module.exports = {
   ]
 }
 ```
+Then add this line to your code:
+``` scss
+--pxvUnit: clamp(0px, calc((100 / 375) * 1vw), calc(1px * 600 / 375));
+```
 
 ---
 
