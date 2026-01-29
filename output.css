@@ -1,69 +1,203 @@
+
 :root {
-    --siteBasisMobile: 375;
-    --siteBasisDesktop: 1440;
-    --siteBasis: var(--siteBasisMobile);
-    --siteMaxMobile: 600;
-    --siteMaxDesktop: 1600;
-    --siteMax: var(--siteMaxMobile);
-    --pxvUnit: clamp(0px, calc((100 / var(--siteBasis)) * 1vw), calc(1px * var(--siteMax) / var(--siteBasis)));
-  }
-  
- 
-  
-  div.border {
-    width: calc(150 * var(--pxvUnit));
-    padding: calc(12 * var(--pxvUnit)) calc(100 * var(--pxvUnit)) calc(13 * var(--pxvUnit)) calc(15 * var(--pxvUnit));
-    border: calc(5 * var(--pxvUnit)) solid blue;
-  }
-  div.absolute {
-    position: absolute;
-    top: calc(50 * var(--pxvUnit));
-    right: calc(-99 * var(--pxvUnit));
-    width: calc(490 * var(--pxvUnit));
-    height: 44.5px;
-    border: calc(1 * var(--pxvUnit)) solid green;
-    background: palegoldenrod;
-  }
-  div.negativeval {
-    border: calc(4 * var(--pxvUnit)) solid brown;
-    background: paleturquoise;
-    width: calc(300 * var(--pxvUnit));
-    height: calc(200 * var(--pxvUnit));
-    margin-left: calc(-30 * var(--pxvUnit));
-  }
-  div.decimal {
-    width: calc(845.34534 * var(--pxvUnit));
-    height: calc(35.3344 * var(--pxvUnit));
-    background: lightpink;
-  }
-  @media (min-width: 1024px) {
-    :root {
-      --siteBasis: var(--siteBasisDesktop);
-      --siteMax: var(--siteMaxDesktop);
-    }
-  
-    div {
-      border: 5px solid green;
-    }
-  }
+  /* 1. Mobile Defaults */
+  --mobile-basis-w: 375;
+  --mobile-basis-h: 667;
+  --mobile-min: 0;
+  --mobile-max: 767;
+  --mobile-squish: 0;    /* Added: prevents calculation failure */
+  --mobile-floor: 0;     /* Added: prevents calculation failure */
 
-  div.bobo {
-    width: calc(50.5 * var(--pxvUnit));
-  }
-  div.shorthand {
-    background: tomato;
-    color: #fff;
-    padding: calc(40 * var(--pxvUnit)) calc(20 * var(--pxvUnit)) calc(100 * var(--pxvUnit)) calc(50 * var(--pxvUnit));
-    margin: calc(400 * var(--pxvUnit)) calc(200 * var(--pxvUnit)) calc(99 * var(--pxvUnit)) calc(200 * var(--pxvUnit));
-  }
-  div.bordertest {
-    border: calc(15 * var(--pxvUnit)) solid pink;
-  }
+  /* 2. Desktop Defaults */
+  --desktop-basis-w: 1440;
+  --desktop-basis-h: 750; 
+  --desktop-min: 768; 
+  --desktop-max: 2000;
+  --desktop-squish: 0.5; 
+  --desktop-floor: 500; 
 
-  div.weird-stuff {
-    margin: calc(20 * var(--pxvUnit)) calc(calc(20 * var(--pxvUnit)) + calc(calc(10 * var(--pxvUnit)) + 5%)) calc(50 * var(--pxvUnit));
-  }
+  /* 3. Active State (Defaults to Mobile) */
+  --active-basis-w: var(--mobile-basis-w);
+  --active-basis-h: var(--mobile-basis-h);
+  --active-min: var(--mobile-min);
+  --active-max: var(--mobile-max);
+  --active-squish: var(--mobile-squish);
+  --active-floor: var(--mobile-floor);
 
-  div.zero-test {
-    margin: calc(20 * var(--pxvUnit)) 0 calc(50 * var(--pxvUnit));
+  /* 4. Core Math */
+  --basis-aspect-ratio: calc(var(--active-basis-w) / var(--active-basis-h));
+  
+  /* Ensure safe-vh always results in a pixel value */
+  --safe-vh: max(1vh, 1px * var(--active-floor) / 100);
+
+  /* 5. The Unit (The "Dumb Pipe" target) */
+  --pxv-unit: max(
+    (var(--active-min) * 1px / var(--active-basis-w)),
+    min(
+      (var(--active-max) * 1px / var(--active-basis-w)),
+      min(
+        (1vw * 100 / var(--active-basis-w)),
+        calc(
+          ((1vw * 100 / var(--active-basis-w)) * (1 - var(--active-squish))) + 
+          ((var(--safe-vh) * var(--basis-aspect-ratio) * 100 / var(--active-basis-w)) * var(--active-squish))
+        )
+      )
+    )
+  );
+}
+
+/* 6. Switch to Desktop */
+@media (width >= 768px) {
+  :root {
+    --active-basis-w: var(--desktop-basis-w);
+    --active-basis-h: var(--desktop-basis-h);
+    --active-min: var(--desktop-min);
+    --active-max: var(--desktop-max);
+    --active-squish: var(--desktop-squish);
+    --active-floor: var(--desktop-floor);
   }
+}
+
+h1 {
+  font-size: calc(60 * var(--pxv-unit));
+}
+
+h2 {
+  font-size: calc(40 * var(--pxv-unit));
+}
+
+body {
+  font-size: calc(16 * var(--pxv-unit));
+}
+/* Typography */
+.typography {
+
+  line-height: calc(24 * var(--pxv-unit));
+  background: #f0f0f0;
+  padding: 10px;
+}
+
+/* Box Model */
+.border {
+  width: calc(150 * var(--pxv-unit));
+  padding: calc(12 * var(--pxv-unit)) calc(100 * var(--pxv-unit)) calc(13 * var(--pxv-unit)) calc(15 * var(--pxv-unit));
+  border: calc(5 * var(--pxv-unit)) solid blue;
+  margin-bottom: 20px;
+}
+
+.shorthand {
+  background: tomato;
+  color: white;
+  padding: calc(40 * var(--pxv-unit)) calc(20 * var(--pxv-unit)) calc(100 * var(--pxv-unit)) calc(50 * var(--pxv-unit));
+  margin: calc(40 * var(--pxv-unit)) calc(20 * var(--pxv-unit)) calc(99 * var(--pxv-unit)) calc(20 * var(--pxv-unit));
+}
+
+.decimal {
+  width: calc(845.34534 * var(--pxv-unit));
+  height: calc(35.3344 * var(--pxv-unit));
+  background: lightpink;
+  margin-bottom: 20px;
+}
+
+.zero-test {
+  margin: calc(20 * var(--pxv-unit)) 0 calc(50 * var(--pxv-unit));
+  background: lightgreen;
+}
+
+/* Positioning */
+.absolute {
+  position: absolute;
+  top: calc(50 * var(--pxv-unit));
+  right: calc(50 * var(--pxv-unit));
+  width: calc(290 * var(--pxv-unit));
+  height: 44.5px;
+  border: calc(10 * var(--pxv-unit)) solid green;
+  background: palegoldenrod;
+}
+
+.negativeval {
+  border: calc(4 * var(--pxv-unit)) solid brown;
+  background: paleturquoise;
+  width: calc(300 * var(--pxv-unit));
+  height: calc(200 * var(--pxv-unit));
+  margin-left: calc(-30 * var(--pxv-unit));
+  margin-top: 250px;
+}
+
+/* Expressions */
+.weird-stuff {
+  margin: calc(20 * var(--pxv-unit)) calc(calc(20 * var(--pxv-unit)) + calc(calc(10 * var(--pxv-unit)) + 5%)) calc(50 * var(--pxv-unit));
+  background: #eee;
+  padding: 10px;
+}
+
+/* Grid & Flex */
+.grid {
+  display: grid;
+  grid-template-columns: calc(100 * var(--pxv-unit)) 1fr calc(200 * var(--pxv-unit));
+  gap: calc(20 * var(--pxv-unit));
+  margin-bottom: 20px;
+}
+.grid div {
+  background: lightblue;
+  padding: 10px;
+}
+.flex {
+  display: flex;
+  gap: calc(15 * var(--pxv-unit));
+}
+.flex div {
+  background: peachpuff;
+  padding: 10px;
+}
+
+/* Pseudo-elements */
+.pseudo::before {
+  content: "before";
+  display: inline-block;
+  margin-right: calc(10 * var(--pxv-unit));
+  padding: calc(4 * var(--pxv-unit));
+  background: gold;
+}
+
+/* Form Elements */
+.test-input {
+  padding: calc(8 * var(--pxv-unit));
+  border: calc(2 * var(--pxv-unit)) solid teal;
+  border-radius: calc(6 * var(--pxv-unit));
+  margin: calc(10 * var(--pxv-unit)) 0;
+}
+
+/* Media Queries */
+.mq-test {
+  padding: calc(20 * var(--pxv-unit));
+  background: lavender;
+}
+@media (min-width: 1600px) {
+  .mq-test {
+    padding: calc(40 * var(--pxv-unit));
+    background: lightsteelblue;
+  }
+}
+
+/* Other CSS properties */
+.extras {
+  width: calc(120 * var(--pxv-unit));
+  height: calc(80 * var(--pxv-unit));
+  background: pink;
+  border-radius: calc(12 * var(--pxv-unit));
+  box-shadow: calc(5 * var(--pxv-unit)) calc(5 * var(--pxv-unit)) calc(10 * var(--pxv-unit)) rgba(0, 0, 0, 0.25);
+  transform: translate(calc(20 * var(--pxv-unit)), calc(10 * var(--pxv-unit)));
+}
+
+/* Selector variety */
+ul li {
+  margin-bottom: calc(12 * var(--pxv-unit));
+}
+#unique {
+  padding: calc(16 * var(--pxv-unit));
+  background: lightcyan;
+}
+article > h2 {
+  margin-top: calc(24 * var(--pxv-unit));
+}
