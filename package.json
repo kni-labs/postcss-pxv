@@ -1,26 +1,22 @@
 {
   "name": "postcss-pxv",
-  "version": "2.0.0",
-  "description": "A PostCSS plugin that converts pxv units into fluid, viewport-scaled values using clamp().",
+  "version": "3.0.0",
+  "description": "Syntactic sugar for fluid scaling. Converts pxv units into CSS Variable-driven calculations.",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "build": "node process-css.js",
-    "prepublishOnly": "npm install && npm run build"
+    "test": "node process-css.js"
   },
   "keywords": [
     "postcss",
-    "plugin",
-    "viewport",
-    "fluid",
-    "responsive",
-    "clamp",
+    "postcss-plugin",
     "css",
     "pxv",
-    "unit"
+    "fluid-design",
+    "responsive-units"
   ],
   "author": "Daniel Box",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kni-labs/postcss-pxv.git"
@@ -29,15 +25,16 @@
     "url": "https://github.com/kni-labs/postcss-pxv/issues"
   },
   "homepage": "https://github.com/kni-labs/postcss-pxv#readme",
+  "engines": {
+    "node": ">=14"
+  },
+  "dependencies": {
+    "postcss-value-parser": "^4.2.0"
+  },
   "peerDependencies": {
     "postcss": "^8.0.0"
   },
-  "dependencies": {
-    "postcss": "^8.5.6",
-    "postcss-value-parser": "^4.2.0"
-  },
-  "devDependencies": {},
-  "engines": {
-    "node": ">=14"
+  "devDependencies": {
+    "postcss": "^8.0.0"
   }
 }

@@ -1,47 +1,78 @@
+
 :root {
-  font-family: system-ui, sans-serif;
-  --siteMin: 0; /* testing to see if manually adding fixes vercel deploy */
-  --siteBasis: 375; /* testing to see if manually adding fixes vercel deploy */
-  --siteMax: 600; /* testing to see if manually adding fixes vercel deploy */
-  --font-min-clamp: 10px; /* global floor */
-  --font-max-clamp: 9999px; /* global "no ceiling" */
-  --font-size: 16pxv; /* overwritten per element */
-}
+  /* 1. Mobile Defaults */
+  --mobile-basis-w: 375;
+  --mobile-basis-h: 667;
+  --mobile-min: 0;
+  --mobile-max: 767;
+  --mobile-squish: 0;    /* Added: prevents calculation failure */
+  --mobile-floor: 0;     /* Added: prevents calculation failure */
 
-@media (min-width: 900px) {
-  :root {
-    --siteMin: 1024;
-    --siteBasis: 1440;
-    --siteMax: 2000;
-  }
-}
+  /* 2. Desktop Defaults */
+  --desktop-basis-w: 1440;
+  --desktop-basis-h: 750; 
+  --desktop-min: 768; 
+  --desktop-max: 2000;
+  --desktop-squish: 0.5; 
+  --desktop-floor: 500; 
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: clamp(
-    var(--font-min-clamp),
-    var(--font-size),
-    var(--font-max-clamp)
+  /* 3. Active State (Defaults to Mobile) */
+  --active-basis-w: var(--mobile-basis-w);
+  --active-basis-h: var(--mobile-basis-h);
+  --active-min: var(--mobile-min);
+  --active-max: var(--mobile-max);
+  --active-squish: var(--mobile-squish);
+  --active-floor: var(--mobile-floor);
+
+  /* 4. Core Math */
+  --basis-aspect-ratio: calc(var(--active-basis-w) / var(--active-basis-h));
+  
+  /* Ensure safe-vh always results in a pixel value */
+  --safe-vh: max(1vh, 1px * var(--active-floor) / 100);
+
+  /* 5. The Unit (The "Dumb Pipe" target) */
+  --pxv-unit: max(
+    (var(--active-min) * 1px / var(--active-basis-w)),
+    min(
+      (var(--active-max) * 1px / var(--active-basis-w)),
+      min(
+        (1vw * 100 / var(--active-basis-w)),
+        calc(
+          ((1vw * 100 / var(--active-basis-w)) * (1 - var(--active-squish))) + 
+          ((var(--safe-vh) * var(--basis-aspect-ratio) * 100 / var(--active-basis-w)) * var(--active-squish))
+        )
+      )
+    )
   );
 }
 
-h1 {
-  --font-size: 32pxv;
-  @media (min-width: 900px) {
-    --font-size: 54pxv;
+/* 6. Switch to Desktop */
+@media (width >= 768px) {
+  :root {
+    --active-basis-w: var(--desktop-basis-w);
+    --active-basis-h: var(--desktop-basis-h);
+    --active-min: var(--desktop-min);
+    --active-max: var(--desktop-max);
+    --active-squish: var(--desktop-squish);
+    --active-floor: var(--desktop-floor);
   }
 }
 
+h1 {
+  font-size: 60pxv;
+  border: 3pxv solid pink;
+}
+
+h2 {
+  font-size: 40pxv;
+}
+
+body {
+  font-size: 16pxv;
+}
 /* Typography */
 .typography {
-  --ff: 14px;
-  --cf: 9999px;
-  font-size: clamp(var(--ff), 16pxv, var(--cf));
+
   line-height: 24pxv;
   background: #f0f0f0;
   padding: 10px;
