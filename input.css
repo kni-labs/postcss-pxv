@@ -60,6 +60,7 @@
 
 h1 {
   font-size: 60pxv;
+  border: 3pxv solid pink;
 }
 
 h2 {

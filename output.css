@@ -60,6 +60,7 @@
 
 h1 {
   font-size: calc(60 * var(--pxv-unit));
+  border: calc(3 * var(--pxv-unit)) solid pink;
 }
 
 h2 {
