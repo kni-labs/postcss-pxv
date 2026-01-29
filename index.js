@@ -23,7 +23,7 @@ module.exports = (opts = {}) => {
         if (node.type === 'word' && pxvRegex.test(node.value)) {
           const num = node.value.slice(0, -3);
           
-          // The "Polite" check: 0, -0, .0 all become just '0'
+          // Complex Calc 0 would work, but lets be polite
           node.value = Number(num) === 0 
             ? '0' 
             : `calc(${num} * var(${unitVar}))`;
